@@ -36,5 +36,5 @@ $ ./snake
 
 ---
 
-> GitHub [@jurek-nk](https://github.com/jurek-nky)
+> GitHub [@jurek-nky](https://github.com/jurek-nky)
 
