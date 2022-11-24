@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(cube LANGUAGES CXX)
+project(snakeCGP LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
 
@@ -7,22 +7,22 @@ if(NOT DEFINED INSTALL_EXAMPLESDIR)
     set(INSTALL_EXAMPLESDIR "examples")
 endif()
 
-set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/opengl/cube")
+set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/opengl/snake")
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui OpenGL OpenGLWidgets Widgets)
 
-qt_add_executable(cube
+qt_add_executable(snake
     geometryengine.cpp geometryengine.h
     main.cpp
     mainwidget.cpp mainwidget.h
 )
 
-set_target_properties(cube PROPERTIES
+set_target_properties(snake PROPERTIES
     WIN32_EXECUTABLE TRUE
     MACOSX_BUNDLE TRUE
 )
 
-target_link_libraries(cube PUBLIC
+target_link_libraries(snake PUBLIC
     Qt::Core
     Qt::Gui
     Qt::OpenGL
@@ -36,7 +36,7 @@ set(shaders_resource_files
     "vshader.glsl"
 )
 
-qt6_add_resources(cube "shaders"
+qt6_add_resources(snake "shaders"
     PREFIX
         "/"
     FILES
@@ -47,14 +47,14 @@ set(textures_resource_files
     "cube.png"
 )
 
-qt6_add_resources(cube "textures"
+qt6_add_resources(snake "textures"
     PREFIX
         "/"
     FILES
         ${textures_resource_files}
 )
 
-install(TARGETS cube
+install(TARGETS snake
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
     LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
