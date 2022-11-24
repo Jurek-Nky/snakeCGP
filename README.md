@@ -7,11 +7,11 @@
 <h4 align="center">An implementation of the classic game snake using OpenGL.</h4>
 
 
-## DEPENDENCIES
+## Dependencies
 
 * [QT6](https://www.qt.io/download)
 
-## How To RUN
+## How To Run
 
 To clone and run this application, you'll need [Git](https://git-scm.com)
 and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer.
