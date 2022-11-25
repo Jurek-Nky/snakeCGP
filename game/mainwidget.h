@@ -4,7 +4,8 @@
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
-#include "geometryengine.h"
+#include "../geometries/snakegeometry.h"
+#include "../geometries/planegeometry.h"
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -66,22 +67,27 @@ private:
 
     QBasicTimer timer;
     QOpenGLShaderProgram program;
-    GeometryEngine *geometries = nullptr;
 
     QOpenGLTexture *texture = nullptr;
 
     QMatrix4x4 projection;
 
-    QVector3D cubeLocation = QVector3D(0, 0, 1.0);
-    QVector2D mousePressPosition;
-    QVector3D rotationAxis;
-    qreal angularSpeed = 0;
-    QQuaternion rotation;
-
-//    QTimer timer;
-
     float boardSize = 20;
     Directions direction;
+
+    bool running;
+    bool singleStep;
+
+    QVector3D snakeHeadPos;
+
+    SnakeGeometry *snakeHead = nullptr;
+    PlaneGeometry *plane = nullptr;
+
+    QMatrix4x4 viewMatrix;
+
+    void moveSnakeHead();
+
+    void initComponents();
 };
 
 #endif // MAINWIDGET_H

@@ -9,26 +9,33 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 
+
+
 class SnakeGeometry {
 public:
-    SnakeGeometry();
+    explicit SnakeGeometry(QMatrix4x4 model);
 
     virtual ~SnakeGeometry();
 
-    void drawSnakeGeometry(QOpenGLShaderProgram *program);
+    void drawSnakeGeometry(QOpenGLShaderProgram *program, QMatrix4x4 projection);
 
-    QVector2D getPosition();
+    QVector2D *getPosition();
 
     void setPosition(QVector2D pos);
 
+    void addChild();
+
+    void move(QMatrix4x4 parent);
+
 private:
+    QMatrix4x4 modelMatrix;
+
     void initSnakeGeometry();
 
     QOpenGLBuffer arrayBuffer;
     QOpenGLBuffer indexBuffer;
 
-
-    QVector2D position = QVector2D(0.0, 0.0);
+    SnakeGeometry *child = nullptr;
 };
 
 

@@ -6,7 +6,7 @@
 #include <QSurfaceFormat>
 
 #ifndef QT_NO_OPENGL
-#include "mainwidget.h"
+#include "game/mainwidget.h"
 #endif
 
 int main(int argc, char *argv[])

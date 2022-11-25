@@ -12,10 +12,11 @@ set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/opengl/snake")
 find_package(Qt6 REQUIRED COMPONENTS Core Gui OpenGL OpenGLWidgets Widgets)
 
 qt_add_executable(snake
-        geometryengine.cpp geometryengine.h
         main.cpp
-        mainwidget.cpp mainwidget.h
-        snakegeometry.cpp snakegeometry.h
+        geometries/vertexData.h
+        game/mainwidget.cpp game/mainwidget.h
+        geometries/snakegeometry.cpp geometries/snakegeometry.h
+        geometries/planegeometry.cpp geometries/planegeometry.h
         )
 
 set_target_properties(snake PROPERTIES
@@ -33,8 +34,8 @@ target_link_libraries(snake PUBLIC
 
 # Resources:
 set(shaders_resource_files
-        "fshader.glsl"
-        "vshader.glsl"
+        "shaders/fshader.glsl"
+        "shaders/vshader.glsl"
         )
 
 qt6_add_resources(snake "shaders"
@@ -45,7 +46,7 @@ qt6_add_resources(snake "shaders"
         )
 
 set(textures_resource_files
-        "cube.png"
+        "resources/cube.png"
         )
 
 qt6_add_resources(snake "textures"
