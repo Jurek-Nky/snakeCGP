@@ -7,11 +7,11 @@
 <h4 align="center">An implementation of the classic game snakeHead using OpenGL.</h4>
 
 
-## DEPENDENCIES
+## Dependencies
 
 * [QT6](https://www.qt.io/download)
 
-## How To RUN
+## How To Run
 
 To clone and run this application, you'll need [Git](https://git-scm.com)
 and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer.
@@ -36,5 +36,5 @@ $ ./snakeHead
 
 ---
 
-> GitHub [@jurek-nk](https://github.com/jurek-nky)
+> GitHub [@jurek-nky](https://github.com/jurek-nky)
 
