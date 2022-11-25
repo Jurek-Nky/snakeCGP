@@ -3,59 +3,60 @@ project(snakeCGP LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
 
-if(NOT DEFINED INSTALL_EXAMPLESDIR)
+if (NOT DEFINED INSTALL_EXAMPLESDIR)
     set(INSTALL_EXAMPLESDIR "examples")
-endif()
+endif ()
 
 set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/opengl/snake")
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui OpenGL OpenGLWidgets Widgets)
 
 qt_add_executable(snake
-    geometryengine.cpp geometryengine.h
-    main.cpp
-    mainwidget.cpp mainwidget.h
-)
+        geometryengine.cpp geometryengine.h
+        main.cpp
+        mainwidget.cpp mainwidget.h
+        snakegeometry.cpp snakegeometry.h
+        )
 
 set_target_properties(snake PROPERTIES
-    WIN32_EXECUTABLE TRUE
-    MACOSX_BUNDLE TRUE
-)
+        WIN32_EXECUTABLE TRUE
+        MACOSX_BUNDLE TRUE
+        )
 
 target_link_libraries(snake PUBLIC
-    Qt::Core
-    Qt::Gui
-    Qt::OpenGL
-    Qt::OpenGLWidgets
-    Qt::Widgets
-)
+        Qt::Core
+        Qt::Gui
+        Qt::OpenGL
+        Qt::OpenGLWidgets
+        Qt::Widgets
+        )
 
 # Resources:
 set(shaders_resource_files
-    "fshader.glsl"
-    "vshader.glsl"
-)
+        "fshader.glsl"
+        "vshader.glsl"
+        )
 
 qt6_add_resources(snake "shaders"
-    PREFIX
+        PREFIX
         "/"
-    FILES
+        FILES
         ${shaders_resource_files}
-)
+        )
 
 set(textures_resource_files
-    "cube.png"
-)
+        "cube.png"
+        )
 
 qt6_add_resources(snake "textures"
-    PREFIX
+        PREFIX
         "/"
-    FILES
+        FILES
         ${textures_resource_files}
-)
+        )
 
 install(TARGETS snake
-    RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
-    BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
-    LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
-)
+        RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
+        BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
+        LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
+        )

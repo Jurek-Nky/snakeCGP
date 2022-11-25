@@ -7,25 +7,28 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
+#include "snakegeometry.h"
 
-class GeometryEngine : protected QOpenGLFunctions
-{
+class SnakeGeometry;
+
+class GeometryEngine : protected QOpenGLFunctions {
 public:
     GeometryEngine();
-    virtual ~GeometryEngine();
 
-    void drawCubeGeometry(QOpenGLShaderProgram *program);
+    virtual ~GeometryEngine();
 
     void drawPlaneGeometry(QOpenGLShaderProgram *program);
 
+    void drawGeometries(QOpenGLShaderProgram *program);
+
 private:
-    void initCubeGeometry();
+
     void initPlaneGeometry();
 
-    QOpenGLBuffer cubeArrayBuf;
-    QOpenGLBuffer cubeIndexBuf;
     QOpenGLBuffer planeArrayBuf;
     QOpenGLBuffer planeIndexBuf;
+
+    SnakeGeometry *snake = nullptr;
 };
 
 #endif // GEOMETRYENGINE_H

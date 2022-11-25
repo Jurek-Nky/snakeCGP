@@ -174,7 +174,7 @@ void MainWidget::paintGL() {
     program.setUniformValue("texture", 0);
 
     // Draw cube geometry
-//    geometries->drawCubeGeometry(&program);
+//    geometries->drawSnakeGeometry(&program);
 
 
     QMatrix4x4 matrix;
@@ -195,7 +195,9 @@ void MainWidget::paintGL() {
     cubMatrix.translate(cubeLocation);
 
     program.setUniformValue("mvp_matrix", projection * cubMatrix);
-    geometries->drawCubeGeometry(&program);
+    geometries->drawGeometries(&program);
+
+//    geometries->drawSnakeGeometry(&program);
 }
 
 void MainWidget::animateGL() {
