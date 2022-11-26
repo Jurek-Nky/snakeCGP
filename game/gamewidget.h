@@ -18,25 +18,31 @@
 #include <QTimer>
 #include <QElapsedTimer>
 
-class GeometryEngine;
-
 enum Directions {
     LEFT, RIGHT, UP, DOWN
 };
 
-class MainWidget : public QOpenGLWidget, protected QOpenGLFunctions {
+class GameWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 Q_OBJECT
 
 public:
     using QOpenGLWidget::QOpenGLWidget;
 
-    MainWidget(QWidget *parent = 0);
+    GameWidget(QWidget *parent);
 
-    ~MainWidget();
+    ~GameWidget();
 
 private slots:
 
     void animateGL();
+
+    void resume();
+
+    void pause();
+
+signals:
+
+    void openMenu();
 
 protected:
     void keyPressEvent(QKeyEvent *e) override;

@@ -6,11 +6,13 @@
 #include <QSurfaceFormat>
 
 #ifndef QT_NO_OPENGL
-#include "game/mainwidget.h"
+
+#include "game/gamewidget.h"
+#include "widgetstack.h"
+
 #endif
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
     QSurfaceFormat format;
@@ -19,9 +21,10 @@ int main(int argc, char *argv[])
 
     app.setApplicationName("cube");
     app.setApplicationVersion("0.1");
+
 #ifndef QT_NO_OPENGL
-    MainWidget widget;
-    widget.show();
+    WidgetStack widgetStack;
+    widgetStack.show();
 #else
     QLabel note("OpenGL Support required");
     note.show();

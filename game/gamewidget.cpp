@@ -1,22 +1,24 @@
 // Copyright (C) 2016 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
-#include "mainwidget.h"
+#include "gamewidget.h"
+#include "../widgetstack.h"
 
 #include <QMouseEvent>
 
 #include <cmath>
 #include <iostream>
 
-MainWidget::MainWidget(QWidget *parent) : QOpenGLWidget(parent), _updateTimer(this), _stopWatch() {
+GameWidget::GameWidget(QWidget *parent) : QOpenGLWidget(parent), _updateTimer(this), _stopWatch() {
     QObject::connect(&_updateTimer, SIGNAL(timeout()), this, SLOT(animateGL()));
     _updateTimer.start(18);
     _stopWatch.start();
 
+    connect(this, SIGNAL(openMenu()), parentWidget(), SLOT(openMenu()));
 
 }
 
-MainWidget::~MainWidget() {
+GameWidget::~GameWidget() {
     // Make sure the context is current when deleting the texture
     // and the buffers.
     makeCurrent();
@@ -24,7 +26,7 @@ MainWidget::~MainWidget() {
     doneCurrent();
 }
 
-void MainWidget::initializeGL() {
+void GameWidget::initializeGL() {
     initializeOpenGLFunctions();
 
     glClearColor(0, 0, 0, 1);
@@ -46,7 +48,7 @@ void MainWidget::initializeGL() {
     initComponents();
 }
 
-void MainWidget::initComponents() {
+void GameWidget::initComponents() {
     // initialize start point for the snake head
     time_t nTime;
     srandom(time(&nTime));
@@ -87,7 +89,7 @@ void MainWidget::initComponents() {
     timer.start(16, this);
 }
 
-void MainWidget::initShaders() {
+void GameWidget::initShaders() {
     // Compile vertex shaders
     if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/vshader.glsl"))
         close();
@@ -105,7 +107,7 @@ void MainWidget::initShaders() {
         close();
 }
 
-void MainWidget::initTextures() {
+void GameWidget::initTextures() {
     // Load cube.png image
     texture = new QOpenGLTexture(QImage(":/resources/cube.png").mirrored());
 
@@ -120,7 +122,7 @@ void MainWidget::initTextures() {
     texture->setWrapMode(QOpenGLTexture::Repeat);
 }
 
-void MainWidget::keyPressEvent(QKeyEvent *e) {
+void GameWidget::keyPressEvent(QKeyEvent *e) {
     switch (e->key()) {
         case Qt::Key_Right:
         case Qt::Key_L:
@@ -146,24 +148,31 @@ void MainWidget::keyPressEvent(QKeyEvent *e) {
             break;
         case Qt::Key_Q:
             exit(0);
+            break;
         case Qt::Key_F:
             !isMaximized() ? showMaximized() : showNormal();
+            break;
+        case Qt::Key_Escape:
+            running = false;
+            emit openMenu();
+            break;
+
     }
 }
 
-void MainWidget::keyReleaseEvent(QKeyEvent *e) {
+void GameWidget::keyReleaseEvent(QKeyEvent *e) {
 }
 
-void MainWidget::mousePressEvent(QMouseEvent *e) {
+void GameWidget::mousePressEvent(QMouseEvent *e) {
 }
 
-void MainWidget::mouseReleaseEvent(QMouseEvent *e) {
+void GameWidget::mouseReleaseEvent(QMouseEvent *e) {
 }
 
-void MainWidget::timerEvent(QTimerEvent *timerEvent) {
+void GameWidget::timerEvent(QTimerEvent *timerEvent) {
 }
 
-void MainWidget::resizeGL(int w, int h) {
+void GameWidget::resizeGL(int w, int h) {
     // Calculate aspect ratio
     qreal aspect = qreal(w) / qreal(h ? h : 1);
 
@@ -177,7 +186,7 @@ void MainWidget::resizeGL(int w, int h) {
     projection.perspective(fov, aspect, zNear, zFar);
 }
 
-void MainWidget::paintGL() {
+void GameWidget::paintGL() {
     // Clear color and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -192,7 +201,7 @@ void MainWidget::paintGL() {
     snakeHead->drawSnakeGeometry(&program, projection);
 }
 
-void MainWidget::animateGL() {
+void GameWidget::animateGL() {
     qint64 timeElapsedMs = _stopWatch.nsecsElapsed() / 1000000;
     if (singleStep && !running) {
         moveSnakeHead();
@@ -207,7 +216,7 @@ void MainWidget::animateGL() {
     }
 }
 
-void MainWidget::moveSnakeHead() {
+void GameWidget::moveSnakeHead() {
     switch (direction) {
         case RIGHT:
             snakeHeadPos.setX(snakeHeadPos.x() + 1.0f);
@@ -227,6 +236,14 @@ void MainWidget::moveSnakeHead() {
     snakeHeadMatrix.translate(floor(-boardSize / 2) + 1, floor(-boardSize / 2) + 1, 0.f);
     snakeHeadMatrix.translate(snakeHeadPos);
     snakeHead->move(snakeHeadMatrix);
+}
+
+void GameWidget::resume() {
+    running = true;
+}
+
+void GameWidget::pause() {
+    running = false;
 }
 
 

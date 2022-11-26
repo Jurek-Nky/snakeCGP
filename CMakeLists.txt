@@ -11,12 +11,16 @@ set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/opengl/snake")
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui OpenGL OpenGLWidgets Widgets)
 
+qt6_wrap_ui(menu/menuwidget.h menu/menuwidget.ui)
+
 qt_add_executable(snake
         main.cpp
         geometries/vertexData.h
-        game/mainwidget.cpp game/mainwidget.h
+        game/gamewidget.cpp game/gamewidget.h
         geometries/snakegeometry.cpp geometries/snakegeometry.h
         geometries/planegeometry.cpp geometries/planegeometry.h
+        menu/menuwidget.cpp menu/menuwidget.h menu/menuwidget.ui
+        widgetstack.cpp widgetstack.h
         )
 
 set_target_properties(snake PROPERTIES
