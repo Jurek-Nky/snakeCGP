@@ -11,6 +11,7 @@ WidgetStack::WidgetStack(QWidget *parent) : QWidget(parent) {
     game = new GameWidget(this);
     stack = new QStackedWidget;
 
+    soundEngine = new SoundEngine();
 
     stack->addWidget(game);
     stack->addWidget(menu);

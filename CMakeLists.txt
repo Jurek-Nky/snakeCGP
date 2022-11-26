@@ -9,7 +9,7 @@ endif ()
 
 set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/opengl/snake")
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui OpenGL OpenGLWidgets Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui OpenGL OpenGLWidgets Widgets Multimedia MultimediaWidgets)
 
 qt6_wrap_ui(menu/menuwidget.h menu/menuwidget.ui)
 
@@ -22,6 +22,7 @@ qt_add_executable(snake
         menu/menuwidget.cpp menu/menuwidget.h menu/menuwidget.ui
         widgetstack.cpp widgetstack.h
         menu/options.cpp menu/options.h
+        audio/soundengine.cpp audio/soundengine.h
         )
 
 set_target_properties(snake PROPERTIES
@@ -35,6 +36,8 @@ target_link_libraries(snake PUBLIC
         Qt::OpenGL
         Qt::OpenGLWidgets
         Qt::Widgets
+        Qt::Multimedia
+        Qt::MultimediaWidgets
         )
 
 # Resources:
