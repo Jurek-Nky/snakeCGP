@@ -31,7 +31,7 @@ $ cmake .
 $ cmake --build .
 
 # Run the app
-$ ./snakeHead 
+$ ./snake
 ```
 
 ---
