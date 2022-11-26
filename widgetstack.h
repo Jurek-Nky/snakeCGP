@@ -1,7 +1,3 @@
-//
-// Created by jurek on 25.11.22.
-//
-
 #ifndef SNAKECGP_WIDGETSTACK_H
 #define SNAKECGP_WIDGETSTACK_H
 

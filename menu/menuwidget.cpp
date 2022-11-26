@@ -1,9 +1,3 @@
-//
-// Created by jurek on 25.11.22.
-//
-
-// You may need to build the project (run Qt uic code generator) to get "ui_menuWidget.h" resolved
-
 #include <iostream>
 #include "menuwidget.h"
 #include "../ui_menuwidget.h"

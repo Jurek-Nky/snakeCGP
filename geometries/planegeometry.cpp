@@ -1,7 +1,3 @@
-//
-// Created by jurek on 25.11.22.
-//
-
 #include "planegeometry.h"
 #include "vertexData.h"
 

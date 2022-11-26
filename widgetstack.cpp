@@ -1,7 +1,3 @@
-//
-// Created by jurek on 25.11.22.
-//
-
 #include <QVBoxLayout>
 #include <QKeyEvent>
 #include <iostream>

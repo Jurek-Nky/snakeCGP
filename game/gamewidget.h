@@ -1,6 +1,3 @@
-// Copyright (C) 2016 The Qt Company Ltd.
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
-
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
@@ -23,7 +20,7 @@ enum Directions {
 };
 
 class GameWidget : public QOpenGLWidget, protected QOpenGLFunctions {
-Q_OBJECT
+    Q_OBJECT
 
 public:
     using QOpenGLWidget::QOpenGLWidget;
@@ -32,17 +29,18 @@ public:
 
     ~GameWidget();
 
-private slots:
+private
+    slots:
 
-    void animateGL();
+            void animateGL();
 
     void resume();
 
     void pause();
 
-signals:
+    signals:
 
-    void openMenu();
+            void openMenu();
 
 protected:
     void keyPressEvent(QKeyEvent *e) override;
