@@ -21,6 +21,7 @@ qt_add_executable(snake
         geometries/planegeometry.cpp geometries/planegeometry.h
         menu/menuwidget.cpp menu/menuwidget.h menu/menuwidget.ui
         widgetstack.cpp widgetstack.h
+        menu/options.cpp menu/options.h
         )
 
 set_target_properties(snake PROPERTIES
