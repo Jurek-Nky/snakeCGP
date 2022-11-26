@@ -35,7 +35,6 @@ private:
     QStackedWidget *stack = nullptr;
     MenuWidget *menu = nullptr;
     GameWidget *game = nullptr;
-
     SoundEngine *soundEngine = nullptr;
 };
 

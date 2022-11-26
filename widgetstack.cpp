@@ -24,6 +24,8 @@ WidgetStack::WidgetStack(QWidget *parent) : QWidget(parent) {
     game->setFocus();
 
     connect(this, SIGNAL(resumeGame()), game, SLOT(resume()));
+
+    connect(menu, SIGNAL(updateAudio()),soundEngine, SLOT(updateAudio()));
 }
 
 WidgetStack::~WidgetStack() {

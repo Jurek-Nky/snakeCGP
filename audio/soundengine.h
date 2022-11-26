@@ -17,8 +17,12 @@ public:
 
 private:
     QMediaPlayer *player;
+    QAudioOutput *audioOutput;
 
 public slots:
+
+    void updateAudio();
+
     void playbackDurationChanged(qint64);
 };
 
