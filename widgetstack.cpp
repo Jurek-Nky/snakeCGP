@@ -16,7 +16,7 @@ WidgetStack::WidgetStack(QWidget *parent) : QWidget(parent) {
     stack->addWidget(game);
     stack->addWidget(menu);
 
-    QVBoxLayout *layout = new QVBoxLayout;
+    auto *layout = new QVBoxLayout;
     layout->addWidget(stack);
     setLayout(layout);
     stack->setFocusPolicy(Qt::FocusPolicy::TabFocus);

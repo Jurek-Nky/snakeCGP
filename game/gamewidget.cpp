@@ -185,7 +185,7 @@ void GameWidget::paintGL() {
     // call draw on all components
     // snakeHead calls all its children
     plane->drawPlaneGeometry(&program, projection);
-    snakeHead->drawSphereGeometry(&program, projection);
+    snakeHead->drawSnakeGeometry(&program, projection);
 }
 
 void GameWidget::animateGL() {
@@ -232,7 +232,3 @@ void GameWidget::resume() {
 void GameWidget::pause() {
     running = false;
 }
-
-
-
-

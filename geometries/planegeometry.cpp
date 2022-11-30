@@ -34,15 +34,6 @@ void PlaneGeometry::initTexture() {
 }
 
 void PlaneGeometry::initVertex() {
-//    VertexData vertices[] = {
-//            {QVector3D(-0.5f, 0.0f, -0.5f), QVector2D(0.f, 0.0f)},
-//            {QVector3D(-0.5f, 0.0f, 0.5f),  QVector2D(0.f, 0.66f)},
-//            {QVector3D(0.5f, 0.0f, 0.5f),   QVector2D(0.5f, 0.66f)},
-//
-//            {QVector3D(0.5f, 0.0f, 0.5f),   QVector2D(0.5f, 0.0f)},
-//            {QVector3D(-0.5f, 0.0f, -0.5f), QVector2D(0.5f, 0.0f)},
-//            {QVector3D(0.5f, 0.0f, -0.5f),  QVector2D(0.5f, 0.0f)},
-//    };
     VertexData vertices[] = {
             {QVector3D(-0.5f, -0.5f, 0.0f), QVector2D(0.0f, 0.0f)},
             {QVector3D(0.5f, -0.5f, 0.0f),  QVector2D(1.0f, 0.0f)},
