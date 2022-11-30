@@ -4,10 +4,10 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
+#include <QOpenGLTexture>
 
 
-
-class SnakeGeometry {
+class SnakeGeometry : protected QOpenGLFunctions {
 public:
     explicit SnakeGeometry(QMatrix4x4 model);
 
@@ -28,8 +28,13 @@ private:
 
     void initSnakeGeometry();
 
+    void initTexture();
+
+    void initVertex();
+
     QOpenGLBuffer arrayBuffer;
     QOpenGLBuffer indexBuffer;
+    QOpenGLTexture *texture;
 
     SnakeGeometry *child = nullptr;
 };

@@ -1,41 +1,67 @@
+#include <iostream>
 #include "planegeometry.h"
 #include "vertexData.h"
 
 
-PlaneGeometry::PlaneGeometry(QMatrix4x4 model) {
+PlaneGeometry::PlaneGeometry(QMatrix4x4 model)
+        : arrayBuffer(QOpenGLBuffer::VertexBuffer),
+          texture(nullptr) {
+    initializeOpenGLFunctions();
+    arrayBuffer.create();
+
     modelMatrix = model;
     initPlaneGeometry();
 }
 
 PlaneGeometry::~PlaneGeometry() {
-
+    arrayBuffer.destroy();
+    if (texture) {
+        delete texture;
+        texture = nullptr;
+    }
 }
 
 void PlaneGeometry::initPlaneGeometry() {
-
-    VertexData vertices[] = {
-            {QVector3D(-0.5f, 0.0f, -0.5f), QVector2D(0.f, 0.0f)},
-            {QVector3D(-0.5f, 0.0f, 0.5f),  QVector2D(0.f, 0.66f)},
-            {QVector3D(0.5f, 0.0f, 0.5f),   QVector2D(0.5f, 0.66f)},
-            {QVector3D(0.5f, 0.0f, -0.5f),  QVector2D(0.5f, 0.0f)},
-    };
-    GLushort indices[] = {
-            0, 1, 2, 3
-    };
-
-    arrayBuffer.bind();
-    arrayBuffer.allocate(vertices, 4 * sizeof(VertexData));
-
-    indexBuffer.bind();
-    indexBuffer.allocate(indices, 4 * sizeof(vertices));
+    initTexture();
+    initVertex();
 }
+
+void PlaneGeometry::initTexture() {
+    texture = new QOpenGLTexture(QImage(":/resources/brick.png").mirrored());
+    texture->setMinificationFilter(QOpenGLTexture::Nearest);
+    texture->setMagnificationFilter(QOpenGLTexture::Linear);
+    texture->setWrapMode(QOpenGLTexture::Repeat);
+}
+
+void PlaneGeometry::initVertex() {
+//    VertexData vertices[] = {
+//            {QVector3D(-0.5f, 0.0f, -0.5f), QVector2D(0.f, 0.0f)},
+//            {QVector3D(-0.5f, 0.0f, 0.5f),  QVector2D(0.f, 0.66f)},
+//            {QVector3D(0.5f, 0.0f, 0.5f),   QVector2D(0.5f, 0.66f)},
+//
+//            {QVector3D(0.5f, 0.0f, 0.5f),   QVector2D(0.5f, 0.0f)},
+//            {QVector3D(-0.5f, 0.0f, -0.5f), QVector2D(0.5f, 0.0f)},
+//            {QVector3D(0.5f, 0.0f, -0.5f),  QVector2D(0.5f, 0.0f)},
+//    };
+    VertexData vertices[] = {
+            {QVector3D(-0.5f, -0.5f, 0.0f), QVector2D(0.0f, 0.0f)},
+            {QVector3D(0.5f, -0.5f, 0.0f),  QVector2D(1.0f, 0.0f)},
+            {QVector3D(0.5f, 0.5f, 0.0f),   QVector2D(1.0f, 1.0f)},
+
+            {QVector3D(-0.5f, -0.5f, 0.0f), QVector2D(0.0f, 0.0f)},
+            {QVector3D(-0.5f, 0.5f, 0.0f),  QVector2D(0.0f, 1.0f)},
+            {QVector3D(0.5f, 0.5f, 0.0f),   QVector2D(1.0f, 1.0f)},
+    };
+    arrayBuffer.bind();
+    arrayBuffer.allocate(vertices, sizeof(vertices));
+}
+
 
 void PlaneGeometry::drawPlaneGeometry(QOpenGLShaderProgram *program, QMatrix4x4 projection) {
 
     program->setUniformValue("mvp_matrix", projection * modelMatrix);
 
     arrayBuffer.bind();
-    indexBuffer.bind();
 
     qintptr offset = 0;
 
@@ -51,6 +77,9 @@ void PlaneGeometry::drawPlaneGeometry(QOpenGLShaderProgram *program, QMatrix4x4 
     program->enableAttributeArray(texcoordLocation);
     program->setAttributeBuffer(texcoordLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
 
-    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, nullptr);
+    texture->bind();
+    program->setUniformValue("texture", 0);
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, arrayBuffer.size());
 }
 

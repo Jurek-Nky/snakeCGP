@@ -53,28 +53,26 @@ protected:
 
     void timerEvent(QTimerEvent *e) override;
 
-    void initializeGL() override;
+    void initializeGL() Q_DECL_OVERRIDE;
 
-    void resizeGL(int w, int h) override;
+    void resizeGL(int w, int h) Q_DECL_OVERRIDE;
 
-    void paintGL() override;
+    void paintGL() Q_DECL_OVERRIDE;
 
 
     void initShaders();
 
-    void initTextures();
 
 private:
 
-    QTimer _updateTimer;
-    QElapsedTimer _stopWatch;
+    QTimer updateTimer;
+    QElapsedTimer stopWatch;
 
     QBasicTimer timer;
     QOpenGLShaderProgram program;
 
     QOpenGLTexture *texture = nullptr;
 
-    QMatrix4x4 projection;
 
     float boardSize = 20;
     Directions direction;
@@ -87,6 +85,7 @@ private:
     SnakeGeometry *snakeHead = nullptr;
     PlaneGeometry *plane = nullptr;
 
+    QMatrix4x4 projection;
     QMatrix4x4 viewMatrix;
 
     void moveSnakeHead();
