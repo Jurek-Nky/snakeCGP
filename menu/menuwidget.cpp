@@ -40,6 +40,7 @@ MenuWidget::MenuWidget(QWidget *parent) :
     connect(this->ui->musicVolumeSlider, SIGNAL(sliderMoved(int)), this, SLOT(changeMusicLevel(int)));
     connect(this->ui->soundEffectSlider, SIGNAL(sliderMoved(int)), this, SLOT(changeSoundEffectLevel(int)));
     connect(this->ui->soundOverallSlider, SIGNAL(sliderMoved(int)), this, SLOT(changeSoundOverallLevel(int)));
+
 }
 
 MenuWidget::~MenuWidget() {
@@ -47,24 +48,29 @@ MenuWidget::~MenuWidget() {
 
 void MenuWidget::changeMusicLevel(int l) {
     Options::musicLevel = l;
+    emit updateAudio();
 }
 
 void MenuWidget::changeSoundEffectLevel(int l) {
     Options::soundEffectLevel = l;
+    emit updateAudio();
 }
 
 void MenuWidget::changeSoundOverallLevel(int l) {
     Options::soundOverallLevel = l;
+    emit updateAudio();
 }
 
 void MenuWidget::setMusicEnabled(bool b) {
     Options::musicEnabled = b;
     this->ui->musicVolumeSlider->setDisabled(!b);
+    emit updateAudio();
 }
 
 void MenuWidget::setSoundEffectsEnabled(bool b) {
     Options::soundEffectsEnabled = b;
     this->ui->soundEffectSlider->setDisabled(!b);
+    emit updateAudio();
 }
 
 void MenuWidget::setSoundEnabled(bool b) {
@@ -83,4 +89,5 @@ void MenuWidget::setSoundEnabled(bool b) {
     this->ui->soundEffectCheckbox->setCheckState(
             !b ? Qt::CheckState::Unchecked : Options::soundEffectsEnabled ? Qt::CheckState::Checked
                                                                           : Qt::CheckState::Unchecked);
+    emit updateAudio();
 }

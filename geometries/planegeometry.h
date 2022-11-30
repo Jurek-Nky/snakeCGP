@@ -4,20 +4,25 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
+#include <QOpenGLTexture>
 
-class PlaneGeometry {
+class PlaneGeometry : protected QOpenGLFunctions {
 public:
     explicit PlaneGeometry(QMatrix4x4 model);
 
     virtual ~PlaneGeometry();
 
-    void drawPlaneGeometry(QOpenGLShaderProgram *program,QMatrix4x4 projection);
+    void drawPlaneGeometry(QOpenGLShaderProgram *program, QMatrix4x4 projection);
 
 private:
     void initPlaneGeometry();
 
+    void initTexture();
+
+    void initVertex();
+
     QOpenGLBuffer arrayBuffer;
-    QOpenGLBuffer indexBuffer;
+    QOpenGLTexture *texture;
 
     QMatrix4x4 modelMatrix;
 };

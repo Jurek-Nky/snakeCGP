@@ -1,8 +1,11 @@
-#include <iostream>
 #include "snakegeometry.h"
 #include "vertexData.h"
+#include <vector>
 
-SnakeGeometry::SnakeGeometry(QMatrix4x4 model) : indexBuffer(QOpenGLBuffer::IndexBuffer) {
+SnakeGeometry::SnakeGeometry(QMatrix4x4 model)
+        : indexBuffer(QOpenGLBuffer::IndexBuffer),
+          texture(nullptr) {
+    initializeOpenGLFunctions();
     arrayBuffer.create();
     indexBuffer.create();
 
@@ -13,74 +16,86 @@ SnakeGeometry::SnakeGeometry(QMatrix4x4 model) : indexBuffer(QOpenGLBuffer::Inde
 SnakeGeometry::~SnakeGeometry() {
     arrayBuffer.destroy();
     indexBuffer.destroy();
+    if (texture) {
+        delete texture;
+        texture = nullptr;
+    }
+}
+
+void SnakeGeometry::initTexture() {
+    texture = new QOpenGLTexture(QImage(":/resources/snake.jpg").mirrored());
+    texture->setMinificationFilter(QOpenGLTexture::Nearest);
+    texture->setMagnificationFilter(QOpenGLTexture::Linear);
+    texture->setWrapMode(QOpenGLTexture::Repeat);
 }
 
 void SnakeGeometry::initSnakeGeometry() {
-    // For cube, we would need only 8 vertices, but we have to
-    // duplicate vertex for each face because texture coordinate
-    // is different.
-    VertexData vertices[] = {
-            // Vertex data for face 0
-            {QVector3D(-0.5f, -0.5f, 0.5f),  QVector2D(0.0f, 0.0f)},  // v0
-            {QVector3D(0.5f, -0.5f, 0.5f),   QVector2D(0.33f, 0.0f)}, // v1
-            {QVector3D(-0.5f, 0.5f, 0.5f),   QVector2D(0.0f, 0.5f)},  // v2
-            {QVector3D(0.5f, 0.5f, 0.5f),    QVector2D(0.33f, 0.5f)}, // v3
+    initTexture();
+    initVertex(50, 50);
+}
 
-            // Vertex data for face 1
-            {QVector3D(0.5f, -0.5f, 0.5f),   QVector2D(0.0f, 0.5f)}, // v4
-            {QVector3D(0.5f, -0.5f, -0.5f),  QVector2D(0.33f, 0.5f)}, // v5
-            {QVector3D(0.5f, 0.5f, 0.5f),    QVector2D(0.0f, 1.0f)},  // v6
-            {QVector3D(0.5f, 0.5f, -0.5f),   QVector2D(0.33f, 1.0f)}, // v7
+void SnakeGeometry::addChild() {
+    if (child == nullptr) {
+        child = new SnakeGeometry(modelMatrix);
+        return;
+    }
+    child->addChild();
+}
 
-            // Vertex data for face 2
-            {QVector3D(0.5f, -0.5f, -0.5f),  QVector2D(0.66f, 0.5f)}, // v8
-            {QVector3D(-0.5f, -0.5f, -0.5f), QVector2D(1.0f, 0.5f)},  // v9
-            {QVector3D(0.5f, 0.5f, -0.5f),   QVector2D(0.66f, 1.0f)}, // v10
-            {QVector3D(-0.5f, 0.5f, -0.5f),  QVector2D(1.0f, 1.0f)},  // v11
+void SnakeGeometry::move(QMatrix4x4 parent) {
+    if (child != nullptr) {
+        child->move(modelMatrix);
+    }
+    modelMatrix = parent;
+}
 
-            // Vertex data for face 3
-            {QVector3D(-0.5f, -0.5f, -0.5f), QVector2D(0.66f, 0.0f)}, // v12
-            {QVector3D(-0.5f, -0.5f, 0.5f),  QVector2D(1.0f, 0.0f)},  // v13
-            {QVector3D(-0.5f, 0.5f, -0.5f),  QVector2D(0.66f, 0.5f)}, // v14
-            {QVector3D(-0.5f, 0.5f, 0.5f),   QVector2D(1.0f, 0.5f)},  // v15
+// this function fills vertices and indices vectors with data to draw a sphere with the given vertical and horizontal resolution
+void SnakeGeometry::initVertex(int latitudeBands, int longitudeBands) {
+    std::vector<VertexData> vertices;
+    std::vector<GLushort> indices;
+    float radius = 0.5f;
+    for (int latNumber = 0; latNumber <= latitudeBands; latNumber++) {
+        float theta = latNumber * M_PI / latitudeBands;
+        float sinTheta = sin(theta);
+        float cosTheta = cos(theta);
 
-            // Vertex data for face 4
-            {QVector3D(-0.5f, -0.5f, -0.5f), QVector2D(0.33f, 0.0f)}, // v16
-            {QVector3D(0.5f, -0.5f, -0.5f),  QVector2D(0.66f, 0.0f)}, // v17
-            {QVector3D(-0.5f, -0.5f, 0.5f),  QVector2D(0.33f, 0.5f)}, // v18
-            {QVector3D(0.5f, -0.5f, 0.5f),   QVector2D(0.66f, 0.5f)}, // v19
+        for (int longNumber = 0; longNumber <= longitudeBands; longNumber++) {
+            float phi = longNumber * 2 * M_PI / longitudeBands;
+            float sinPhi = sin(phi);
+            float cosPhi = cos(phi);
 
-            // Vertex data for face 5
-            {QVector3D(-0.5f, 0.5f, 0.5f),   QVector2D(0.33f, 0.5f)}, // v20
-            {QVector3D(0.5f, 0.5f, 0.5f),    QVector2D(0.66f, 0.5f)}, // v21
-            {QVector3D(-0.5f, 0.5f, -0.5f),  QVector2D(0.33f, 1.0f)}, // v22
-            {QVector3D(0.5f, 0.5f, -0.5f),   QVector2D(0.66f, 1.0f)}  // v23
-    };
+            float x = cosPhi * sinTheta;
+            float y = cosTheta;
+            float z = sinPhi * sinTheta;
+            float u = 1 - (longNumber / (float) longitudeBands);
+            float v = 1 - (latNumber / (float) latitudeBands);
 
-    // Indices for drawing cube faces using triangle strips.
-    // Triangle strips can be connected by duplicating indices
-    // between the strips. If connecting strips have opposite
-    // vertex order then last index of the first strip and first
-    // index of the second strip needs to be duplicated. If
-    // connecting strips have same vertex order then only last
-    // index of the first strip needs to be duplicated.
-    GLushort indices[] = {
-            0, 1, 2, 3, 3,     // Face 0 - triangle strip ( v0,  v1,  v2,  v3)
-            4, 4, 5, 6, 7, 7, // Face 1 - triangle strip ( v4,  v5,  v6,  v7)
-            8, 8, 9, 10, 11, 11, // Face 2 - triangle strip ( v8,  v9, v10, v11)
-            12, 12, 13, 14, 15, 15, // Face 3 - triangle strip (v12, v13, v14, v15)
-            16, 16, 17, 18, 19, 19, // Face 4 - triangle strip (v16, v17, v18, v19)
-            20, 20, 21, 22, 23      // Face 5 - triangle strip (v20, v21, v22, v23)
-    };
+            vertices.push_back({QVector3D(x * radius, y * radius, z * radius), QVector2D(u, v)});
+        }
+    }
 
-//! [1]
-    // Transfer vertex data to VBO 0
+    for (int latNumber = 0; latNumber < latitudeBands; latNumber++) {
+        for (int longNumber = 0; longNumber < longitudeBands; longNumber++) {
+            int first = (latNumber * (longitudeBands + 1)) + longNumber;
+            int second = first + longitudeBands + 1;
+            indices.push_back(first);
+            indices.push_back(second);
+            indices.push_back(first + 1);
+
+            indices.push_back(second);
+            indices.push_back(second + 1);
+            indices.push_back(first + 1);
+        }
+    }
+
+    // bind vertices to array buffer
     arrayBuffer.bind();
-    arrayBuffer.allocate(vertices, 24 * sizeof(VertexData));
+    arrayBuffer.allocate(vertices.data(), vertices.size() * sizeof(VertexData));
 
-    // Transfer index data to VBO 1
+    // bind indices to index buffer
     indexBuffer.bind();
-    indexBuffer.allocate(indices, 34 * sizeof(GLushort));
+    indexBuffer.allocate(indices.data(), indices.size() * sizeof(GLushort));
+
 }
 
 void SnakeGeometry::drawSnakeGeometry(QOpenGLShaderProgram *program, QMatrix4x4 projection) {
@@ -105,24 +120,13 @@ void SnakeGeometry::drawSnakeGeometry(QOpenGLShaderProgram *program, QMatrix4x4 
     program->enableAttributeArray(texcoordLocation);
     program->setAttributeBuffer(texcoordLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
 
-    glDrawElements(GL_TRIANGLE_STRIP, 34, GL_UNSIGNED_SHORT, nullptr);
+    texture->bind();
+    program->setUniformValue("texture", 0);
+
+    glDrawElements(GL_TRIANGLES, indexBuffer.size(), GL_UNSIGNED_SHORT, nullptr);
 
     if (child != nullptr) {
         child->drawSnakeGeometry(program, projection);
     }
-}
 
-void SnakeGeometry::addChild() {
-    if (child == nullptr) {
-        child = new SnakeGeometry(modelMatrix);
-        return;
-    }
-    child->addChild();
-}
-
-void SnakeGeometry::move(QMatrix4x4 parent) {
-    if (child != nullptr) {
-        child->move(modelMatrix);
-    }
-    modelMatrix = parent;
 }

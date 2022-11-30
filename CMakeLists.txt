@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(snakeCGP LANGUAGES CXX)
 
+set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOMOC ON)
 
 if (NOT DEFINED INSTALL_EXAMPLESDIR)
@@ -9,7 +10,7 @@ endif ()
 
 set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/opengl/snake")
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui OpenGL OpenGLWidgets Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui OpenGL OpenGLWidgets Widgets Multimedia MultimediaWidgets)
 
 qt6_wrap_ui(menu/menuwidget.h menu/menuwidget.ui)
 
@@ -19,9 +20,14 @@ qt_add_executable(snake
         game/gamewidget.cpp game/gamewidget.h
         geometries/snakegeometry.cpp geometries/snakegeometry.h
         geometries/planegeometry.cpp geometries/planegeometry.h
+        geometries/FoodGeometry.cpp geometries/FoodGeometry.h
         menu/menuwidget.cpp menu/menuwidget.h menu/menuwidget.ui
         widgetstack.cpp widgetstack.h
         menu/options.cpp menu/options.h
+        audio/soundengine.cpp audio/soundengine.h
+        shaders.qrc
+        textures.qrc
+        sounds.qrc
         )
 
 set_target_properties(snake PROPERTIES
@@ -35,30 +41,8 @@ target_link_libraries(snake PUBLIC
         Qt::OpenGL
         Qt::OpenGLWidgets
         Qt::Widgets
-        )
-
-# Resources:
-set(shaders_resource_files
-        "shaders/fshader.glsl"
-        "shaders/vshader.glsl"
-        )
-
-qt6_add_resources(snake "shaders"
-        PREFIX
-        "/"
-        FILES
-        ${shaders_resource_files}
-        )
-
-set(textures_resource_files
-        "resources/cube.png"
-        )
-
-qt6_add_resources(snake "textures"
-        PREFIX
-        "/"
-        FILES
-        ${textures_resource_files}
+        Qt::Multimedia
+        Qt::MultimediaWidgets
         )
 
 install(TARGETS snake

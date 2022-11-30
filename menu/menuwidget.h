@@ -19,11 +19,11 @@ public:
 
 public slots:
 
-    static void changeMusicLevel(int);
+    void changeMusicLevel(int);
 
-    static void changeSoundEffectLevel(int);
+    void changeSoundEffectLevel(int);
 
-    static void changeSoundOverallLevel(int);
+    void changeSoundOverallLevel(int);
 
     void setMusicEnabled(bool);
 
@@ -31,7 +31,9 @@ public slots:
 
     void setSoundEnabled(bool);
 
+signals:
 
+    void updateAudio();
 
 private:
     Ui::MenuWidget *ui;

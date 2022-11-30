@@ -11,11 +11,12 @@ WidgetStack::WidgetStack(QWidget *parent) : QWidget(parent) {
     game = new GameWidget(this);
     stack = new QStackedWidget;
 
+    soundEngine = new SoundEngine();
 
     stack->addWidget(game);
     stack->addWidget(menu);
 
-    QVBoxLayout *layout = new QVBoxLayout;
+    auto *layout = new QVBoxLayout;
     layout->addWidget(stack);
     setLayout(layout);
     stack->setFocusPolicy(Qt::FocusPolicy::TabFocus);
@@ -23,6 +24,8 @@ WidgetStack::WidgetStack(QWidget *parent) : QWidget(parent) {
     game->setFocus();
 
     connect(this, SIGNAL(resumeGame()), game, SLOT(resume()));
+
+    connect(menu, SIGNAL(updateAudio()),soundEngine, SLOT(updateAudio()));
 }
 
 WidgetStack::~WidgetStack() {
