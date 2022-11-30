@@ -15,9 +15,7 @@ public:
 
     void drawSnakeGeometry(QOpenGLShaderProgram *program, QMatrix4x4 projection);
 
-    QVector2D *getPosition();
-
-    void setPosition(QVector2D pos);
+    void drawSphereGeometry(QOpenGLShaderProgram *program, QMatrix4x4 projection);
 
     void addChild();
 
@@ -27,6 +25,8 @@ private:
     QMatrix4x4 modelMatrix;
 
     void initSnakeGeometry();
+
+    void initSphereGeometry(int latitudeBands, int longitudeBands);
 
     QOpenGLBuffer arrayBuffer;
     QOpenGLBuffer indexBuffer;

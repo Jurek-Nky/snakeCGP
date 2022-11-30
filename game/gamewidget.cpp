@@ -62,7 +62,7 @@ void GameWidget::initComponents() {
 
     QMatrix4x4 snakeHeadMatrix = viewMatrix;
     // move snakeHeadMatrix to the bottom left corner
-    snakeHeadMatrix.translate(round(-boardSize / 2) + 1, round(-boardSize / 2) + 1, 0.f);
+    snakeHeadMatrix.translate(std::round(-boardSize / 2) + 1, std::round(-boardSize / 2) + 1, 0.f);
     // snakeHeadMatrix needs to be translated to the snakeHeadPosition
     snakeHeadMatrix.translate(snakeHeadPos);
     snakeHead = new SnakeGeometry(snakeHeadMatrix);
@@ -195,7 +195,7 @@ void GameWidget::paintGL() {
     // call draw on all components
     // snakeHead calls all its children
     plane->drawPlaneGeometry(&program, projection);
-    snakeHead->drawSnakeGeometry(&program, projection);
+    snakeHead->drawSphereGeometry(&program, projection);
 }
 
 void GameWidget::animateGL() {

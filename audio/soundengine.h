@@ -16,14 +16,23 @@ public:
     void playMusic();
 
 private:
-    QMediaPlayer *player;
-    QAudioOutput *audioOutput;
+    QMediaPlayer *musicPlayer;
+    QAudioOutput *musicOutput;
+    QMediaPlayer *effectPlayer;
+    QAudioOutput *effectOutput;
+
 
 public slots:
 
     void updateAudio();
 
     void playbackDurationChanged(qint64);
+
+    void playEatingSound();
+
+    void playDeathSound();
+
+    void playMenuMusic();
 };
 
 

@@ -10,14 +10,17 @@
 
 SoundEngine::SoundEngine() {
 
+    effectOutput = new QAudioOutput;
+    effectPlayer = new QMediaPlayer;
+    effectPlayer->setAudioOutput(effectOutput);
+    effectOutput->setVolume(float(Options::soundEffectLevel) / 100.0f);
 
-    player = new QMediaPlayer;
-    audioOutput = new QAudioOutput;
-    player->setAudioOutput(audioOutput);
-//    connect(player, SIGNAL(positionChanged(qint64)), this, SLOT(positionChanged(qint64)));
-    player->setSource(QUrl::fromLocalFile("/home/jurek/git/snakeCGP/audio/music.mp3"));
-    audioOutput->setVolume(float(Options::musicLevel) / 100.0f);
-    player->play();
+    musicPlayer = new QMediaPlayer;
+    musicOutput = new QAudioOutput;
+    musicPlayer->setAudioOutput(musicOutput);
+    musicPlayer->setSource(QUrl("qrc:/audio/music.mp3"));
+    musicOutput->setVolume(float(Options::musicLevel) / 100.0f);
+    musicPlayer->play();
 }
 
 void SoundEngine::playbackDurationChanged(qint64 d) {
@@ -28,7 +31,24 @@ void SoundEngine::playMusic() {
 }
 
 void SoundEngine::updateAudio() {
-    audioOutput->setMuted(!Options::musicEnabled);
-    audioOutput->setVolume(float(Options::musicLevel) / 100.0f);
+    musicOutput->setMuted(!Options::musicEnabled);
+    musicOutput->setVolume(float(Options::musicLevel) / 100.0f);
 
+    effectOutput->setMuted(!Options::soundEffectsEnabled);
+    effectOutput->setVolume(float(Options::soundEffectLevel) / 100.0f);
+}
+
+void SoundEngine::playEatingSound() {
+    effectPlayer->setSource(QUrl::fromLocalFile(""));
+    effectPlayer->play();
+}
+
+void SoundEngine::playDeathSound() {
+    effectPlayer->setSource(QUrl("qrc:/audio/gameOver.wav"));
+    effectPlayer->play();
+}
+
+void SoundEngine::playMenuMusic() {
+    musicPlayer->setSource(QUrl("qrc:/audio/menuMusic.mp3"));
+    musicPlayer->play();
 }
