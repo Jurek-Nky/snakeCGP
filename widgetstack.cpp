@@ -11,6 +11,7 @@ WidgetStack::WidgetStack(QWidget *parent) : QWidget(parent) {
     game = new GameWidget(this);
     stack = new QStackedWidget;
 
+    soundEngine = new SoundEngine();
 
     stack->addWidget(game);
     stack->addWidget(menu);
@@ -23,6 +24,8 @@ WidgetStack::WidgetStack(QWidget *parent) : QWidget(parent) {
     game->setFocus();
 
     connect(this, SIGNAL(resumeGame()), game, SLOT(resume()));
+
+    connect(menu, SIGNAL(updateAudio()),soundEngine, SLOT(updateAudio()));
 }
 
 WidgetStack::~WidgetStack() {
