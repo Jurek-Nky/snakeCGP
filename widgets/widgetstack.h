@@ -4,10 +4,10 @@
 
 #include <QStackedWidget>
 #include <QOpenGLFunctions>
-#include "menu/menuwidget.h"
-#include "game/gamewidget.h"
-#include "audio/soundengine.h"
-#include "menu/gameoverwidget.h"
+#include "menuwidget.h"
+#include "openglwidget.h"
+#include "../audio/soundengine.h"
+#include "gameoverwidget.h"
 
 class WidgetStack : public QWidget {
 Q_OBJECT
@@ -25,6 +25,8 @@ public slots:
     void openMenu();
 
     void gameOver();
+
+    void toggleMaximized();
 
 protected:
 

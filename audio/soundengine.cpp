@@ -6,7 +6,7 @@
 #include <QAudioOutput>
 #include <QAudioDevice>
 #include "soundengine.h"
-#include "../menu/options.h"
+#include "../options.h"
 
 SoundEngine::SoundEngine() {
 

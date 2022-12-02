@@ -2,9 +2,9 @@
 #include <QKeyEvent>
 #include <iostream>
 #include "widgetstack.h"
-#include "menu/menuwidget.h"
-#include "game/gamewidget.h"
-#include "menu/gameoverwidget.h"
+#include "menuwidget.h"
+#include "openglwidget.h"
+#include "gameoverwidget.h"
 
 WidgetStack::WidgetStack(QWidget *parent) : QWidget(parent) {
 
@@ -68,4 +68,8 @@ void WidgetStack::gameOver() {
     stack->setCurrentWidget(gameOverWidget);
     gameOverWidget->setFocus();
     soundEngine->playGameOver();
+}
+
+void WidgetStack::toggleMaximized() {
+    isMaximized() ? showNormal() : showMaximized();
 }

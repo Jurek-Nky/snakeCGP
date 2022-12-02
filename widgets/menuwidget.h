@@ -2,7 +2,7 @@
 #define SNAKECGP_MENUWIDGET_H
 
 #include <QWidget>
-#include "options.h"
+#include "../options.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MenuWidget; }

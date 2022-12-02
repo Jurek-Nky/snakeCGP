@@ -4,7 +4,7 @@
 #include "../geometries/snakegeometry.h"
 #include "../geometries/planegeometry.h"
 #include "../geometries/FoodGeometry.h"
-#include "../menu/options.h"
+#include "../options.h"
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -44,6 +44,7 @@ signals:
 
     void openMenu();
     void gameOver();
+    void toggleMaximized();
 
 protected:
     void keyPressEvent(QKeyEvent *e) override;

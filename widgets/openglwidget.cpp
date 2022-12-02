@@ -1,5 +1,5 @@
-#include "gamewidget.h"
-#include "../widgetstack.h"
+#include "openglwidget.h"
+#include "widgetstack.h"
 
 #include <QMouseEvent>
 
@@ -19,6 +19,7 @@ GameWidget::GameWidget(QWidget *parent)
 
     connect(this, SIGNAL(openMenu()), parentWidget(), SLOT(openMenu()));
     connect(this, SIGNAL(gameOver()), parentWidget(), SLOT(gameOver()));
+    connect(this, SIGNAL(toggleMaximized()),parentWidget(), SLOT(toggleMaximized()));
 }
 
 GameWidget::~GameWidget() {
@@ -162,7 +163,7 @@ void GameWidget::keyPressEvent(QKeyEvent *e) {
             exit(0);
             break;
         case Qt::Key_F:
-            !isMaximized() ? showMaximized() : showNormal();
+            emit toggleMaximized();
             break;
         case Qt::Key_Escape:
             Options::running = false;
