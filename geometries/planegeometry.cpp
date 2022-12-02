@@ -27,7 +27,7 @@ void PlaneGeometry::initPlaneGeometry() {
 }
 
 void PlaneGeometry::initTexture() {
-    texture = new QOpenGLTexture(QImage(":/resources/brick.png").mirrored());
+    texture = new QOpenGLTexture(QImage(":/resources/textures/brick.png").mirrored());
     texture->setMinificationFilter(QOpenGLTexture::Nearest);
     texture->setMagnificationFilter(QOpenGLTexture::Linear);
     texture->setWrapMode(QOpenGLTexture::Repeat);

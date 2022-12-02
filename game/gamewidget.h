@@ -3,6 +3,8 @@
 
 #include "../geometries/snakegeometry.h"
 #include "../geometries/planegeometry.h"
+#include "../geometries/FoodGeometry.h"
+#include "../menu/options.h"
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -20,7 +22,7 @@ enum Directions {
 };
 
 class GameWidget : public QOpenGLWidget, protected QOpenGLFunctions {
-    Q_OBJECT
+Q_OBJECT
 
 public:
     using QOpenGLWidget::QOpenGLWidget;
@@ -32,15 +34,16 @@ public:
 private
     slots:
 
-            void animateGL();
+    void animateGL();
 
     void resume();
 
     void pause();
 
-    signals:
+signals:
 
-            void openMenu();
+    void openMenu();
+    void gameOver();
 
 protected:
     void keyPressEvent(QKeyEvent *e) override;
@@ -74,23 +77,29 @@ private:
     QOpenGLTexture *texture = nullptr;
 
 
-    float boardSize = 20;
     Directions direction;
 
-    bool running;
     bool singleStep;
 
     QVector3D snakeHeadPos;
+    QVector3D foodPos;
 
     SnakeGeometry *snakeHead = nullptr;
     PlaneGeometry *plane = nullptr;
+    FoodGeometry *food = nullptr;
 
     QMatrix4x4 projection;
     QMatrix4x4 viewMatrix;
 
-    void moveSnakeHead();
+    void updateSnakePosition();
 
     void initComponents();
+
+    void generateNewFood();
+
+    void checkCollisions();
+
+    void moveSnakeHead();
 };
 
 #endif // MAINWIDGET_H

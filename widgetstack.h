@@ -7,6 +7,7 @@
 #include "menu/menuwidget.h"
 #include "game/gamewidget.h"
 #include "audio/soundengine.h"
+#include "menu/gameoverwidget.h"
 
 class WidgetStack : public QWidget {
 Q_OBJECT
@@ -23,6 +24,8 @@ public slots:
 
     void openMenu();
 
+    void gameOver();
+
 protected:
 
     void keyPressEvent(QKeyEvent *e) override;
@@ -35,6 +38,7 @@ private:
     QStackedWidget *stack = nullptr;
     MenuWidget *menu = nullptr;
     GameWidget *game = nullptr;
+    GameOverWidget *gameOverWidget = nullptr;
     SoundEngine *soundEngine = nullptr;
 };
 

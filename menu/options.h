@@ -13,6 +13,10 @@ public:
 
     static bool camThirdPersonEnabled;
     static float camZoom;
+
+    static float boardSize;
+
+    static bool running;
 };
 
 

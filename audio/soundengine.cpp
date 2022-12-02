@@ -43,12 +43,12 @@ void SoundEngine::playEatingSound() {
     effectPlayer->play();
 }
 
-void SoundEngine::playDeathSound() {
-    effectPlayer->setSource(QUrl("qrc:/audio/gameOver.wav"));
-    effectPlayer->play();
-}
-
 void SoundEngine::playMenuMusic() {
     musicPlayer->setSource(QUrl("qrc:/audio/menuMusic.mp3"));
+    musicPlayer->play();
+}
+
+void SoundEngine::playGameOver() {
+    musicPlayer->setSource(QUrl("qrc:/audio/gameOver.mp3"));
     musicPlayer->play();
 }

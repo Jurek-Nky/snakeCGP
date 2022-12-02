@@ -1,6 +1,7 @@
 #include "snakegeometry.h"
 #include "vertexData.h"
 #include <vector>
+#include <iostream>
 
 SnakeGeometry::SnakeGeometry(QMatrix4x4 model)
         : indexBuffer(QOpenGLBuffer::IndexBuffer),
@@ -23,7 +24,7 @@ SnakeGeometry::~SnakeGeometry() {
 }
 
 void SnakeGeometry::initTexture() {
-    texture = new QOpenGLTexture(QImage(":/resources/snake.jpg").mirrored());
+    texture = new QOpenGLTexture(QImage(":/resources/textures/snake.jpg").mirrored());
     texture->setMinificationFilter(QOpenGLTexture::Nearest);
     texture->setMagnificationFilter(QOpenGLTexture::Linear);
     texture->setWrapMode(QOpenGLTexture::Repeat);
@@ -37,15 +38,18 @@ void SnakeGeometry::initSnakeGeometry() {
 void SnakeGeometry::addChild() {
     if (child == nullptr) {
         child = new SnakeGeometry(modelMatrix);
+        child->position = position;
         return;
     }
     child->addChild();
 }
 
-void SnakeGeometry::move(QMatrix4x4 parent) {
+void SnakeGeometry::move(QMatrix4x4 parent, QVector3D pos) {
     if (child != nullptr) {
-        child->move(modelMatrix);
+        child->move(modelMatrix, position);
+        child->position = position;
     }
+    position = pos;
     modelMatrix = parent;
 }
 
@@ -129,4 +133,23 @@ void SnakeGeometry::drawSnakeGeometry(QOpenGLShaderProgram *program, QMatrix4x4 
         child->drawSnakeGeometry(program, projection);
     }
 
+}
+
+
+// returns true if position == snakePosition otherwise it returns the call to its child
+bool SnakeGeometry::checkCollision(QVector3D vector) {
+    if (position == vector and !isHead) {
+        return true;
+    }
+    if (child != nullptr) {
+        return child->checkCollision(vector);
+    }
+    return false;
+}
+
+bool SnakeGeometry::checkFoodCollision(QVector3D food) {
+    if (position == food) {
+        return true;
+    }
+    return false;
 }

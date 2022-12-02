@@ -18,7 +18,7 @@ GameWidget::GameWidget(QWidget *parent)
     stopWatch.start();
 
     connect(this, SIGNAL(openMenu()), parentWidget(), SLOT(openMenu()));
-
+    connect(this, SIGNAL(gameOver()), parentWidget(), SLOT(gameOver()));
 }
 
 GameWidget::~GameWidget() {
@@ -42,7 +42,6 @@ void GameWidget::initializeGL() {
     glEnable(GL_CULL_FACE);
 
 
-    setMinimumSize(800, 800);
     setWindowTitle("Snake");
 
     initComponents();
@@ -56,40 +55,55 @@ void GameWidget::initializeGL() {
 
 void GameWidget::initComponents() {
     // initialize start point for the snake head
-    snakeHeadPos = QVector3D(std::fmod(float(random()), boardSize - 1.0f),
-                             std::fmod(float(random()), boardSize - 1.0f),
-                             1.0f);
-
-
+    snakeHeadPos = QVector3D(std::fmod(random(), Options::boardSize - 2.0f) + 1.0f,
+                             std::fmod(random(), Options::boardSize - 2.0f) + 1.0f,
+                             0.0f);
     // creating the viewMatrix, that represents the center of the playing field
     viewMatrix = QMatrix4x4();
-    viewMatrix.translate(0.0, 0.0, -boardSize * 2);
+    viewMatrix.translate(0.0, 0.0, -Options::boardSize * 2);
     viewMatrix.rotate(QQuaternion::fromAxisAndAngle(QVector3D(0.0, 0.0, 1.0), 45));
     viewMatrix.rotate(QQuaternion::fromAxisAndAngle(QVector3D(-1.0, 1.0, 0.0), 55));
 
     QMatrix4x4 snakeHeadMatrix = viewMatrix;
     // move snakeHeadMatrix to the bottom left corner
-    snakeHeadMatrix.translate(std::round(-boardSize / 2) + 1, std::round(-boardSize / 2) + 1, 0.f);
+    snakeHeadMatrix.translate(std::floor(-Options::boardSize / 2) - 1, std::floor(-Options::boardSize / 2) - 1, 0.f);
     // snakeHeadMatrix needs to be translated to the snakeHeadPosition
     snakeHeadMatrix.translate(snakeHeadPos);
     snakeHead = new SnakeGeometry(snakeHeadMatrix);
+    snakeHead->isHead = true;
+
+    generateNewFood();
 
     // create modelMatrix for the playing field and create the field
     QMatrix4x4 planeMatrix = viewMatrix;
     planeMatrix.translate(0.0, 0.0, -1.0);
-    if (std::fmod(boardSize, 2.0f) != 1) {
+    if (std::fmod(Options::boardSize, 2.0f) != 1) {
         planeMatrix.translate(0.5f, 0.5f, 0.0f);
-        planeMatrix.scale(boardSize + 0.5f, boardSize + 0.5f, 0.0f);
-    } else {
-        planeMatrix.scale(boardSize + 0.5f, boardSize + 0.5f, 0.0);
+    }
+    planeMatrix.scale(Options::boardSize + 1.0f + 0.5f, Options::boardSize + 1.0f + 0.5f, 0.0f);
+    plane = new PlaneGeometry(planeMatrix);
+}
+
+void GameWidget::generateNewFood() {
+    foodPos = QVector3D(std::fmod(random(), Options::boardSize - 2.0f) + 1.0f,
+                        std::fmod(random(), Options::boardSize - 2.0f) + 1.0f,
+                        0.0f);
+
+    // regenerate position as long as the food is on the snake
+    // both checks are needed because checkCollision doesn't check the head and
+    // checkFoodCollision only checks the head of the snake to save time
+    while (snakeHead->checkCollision(foodPos) or snakeHead->checkFoodCollision(foodPos)) {
+        foodPos = QVector3D(std::fmod(random(), Options::boardSize - 2.0f) + 1.0f,
+                            std::fmod(random(), Options::boardSize - 2.0f) + 1.0f,
+                            0.0f);
     }
 
-    plane = new PlaneGeometry(planeMatrix);
-
-    snakeHead->addChild();
-    snakeHead->addChild();
-    snakeHead->addChild();
-    snakeHead->addChild();
+    QMatrix4x4 foodMatrix = viewMatrix;
+    // move foodMatrix to the bottom left corner
+    foodMatrix.translate(std::round(-Options::boardSize / 2), std::round(-Options::boardSize / 2), 0.f);
+    // foodMatrix needs to be translated to the foodPosition
+    foodMatrix.translate(foodPos);
+    food = new FoodGeometry(foodMatrix);
 }
 
 void GameWidget::initShaders() {
@@ -116,22 +130,30 @@ void GameWidget::keyPressEvent(QKeyEvent *e) {
     switch (e->key()) {
         case Qt::Key_Right:
         case Qt::Key_L:
-            direction = RIGHT;
+            if (direction != LEFT) {
+                direction = RIGHT;
+            }
             break;
         case Qt::Key_Left:
         case Qt::Key_H:
-            direction = LEFT;
+            if (direction != RIGHT) {
+                direction = LEFT;
+            }
             break;
         case Qt::Key_Up:
         case Qt::Key_K:
-            direction = UP;
+            if (direction != DOWN) {
+                direction = UP;
+            }
             break;
         case Qt::Key_Down:
         case Qt::Key_J:
-            direction = DOWN;
+            if (direction != UP) {
+                direction = DOWN;
+            }
             break;
         case Qt::Key_Space:
-            running = !running;
+            Options::running = !Options::running;
             break;
         case Qt::Key_Comma:
             singleStep = true;
@@ -143,7 +165,7 @@ void GameWidget::keyPressEvent(QKeyEvent *e) {
             !isMaximized() ? showMaximized() : showNormal();
             break;
         case Qt::Key_Escape:
-            running = false;
+            Options::running = false;
             emit openMenu();
             break;
 
@@ -186,21 +208,21 @@ void GameWidget::paintGL() {
     // snakeHead calls all its children
     plane->drawPlaneGeometry(&program, projection);
     snakeHead->drawSnakeGeometry(&program, projection);
+    food->drawFoodGeometry(&program, projection);
 }
 
 void GameWidget::animateGL() {
     qint64 timeElapsedMs = stopWatch.nsecsElapsed() / 1000000;
-    if (singleStep && !running) {
+    if (singleStep && !Options::running) {
         moveSnakeHead();
         update();
         singleStep = false;
-    } else if (timeElapsedMs > 300 && running) {
+    } else if (timeElapsedMs > 150 && Options::running) {
         stopWatch.restart();
         moveSnakeHead();
         update();
-    } else {
-        update();
     }
+    update();
 }
 
 void GameWidget::moveSnakeHead() {
@@ -218,17 +240,35 @@ void GameWidget::moveSnakeHead() {
             snakeHeadPos.setY(snakeHeadPos.y() - 1.0f);
             break;
     }
-
     QMatrix4x4 snakeHeadMatrix = viewMatrix;
-    snakeHeadMatrix.translate(floor(-boardSize / 2) + 1, floor(-boardSize / 2) + 1, 0.f);
+    snakeHeadMatrix.translate(floor(-Options::boardSize / 2), floor(-Options::boardSize / 2), 0.f);
     snakeHeadMatrix.translate(snakeHeadPos);
-    snakeHead->move(snakeHeadMatrix);
+    snakeHead->move(snakeHeadMatrix, snakeHeadPos);
+
+    if (snakeHeadPos.x() < 0 || snakeHeadPos.x() > Options::boardSize - 1 ||
+        snakeHeadPos.y() < 0 || snakeHeadPos.y() > Options::boardSize - 1) {
+        Options::running = false;
+        emit gameOver();
+    }
+
+    // check if snakeHead collides with itself
+    if (snakeHead->checkCollision(snakeHeadPos)) {
+        Options::running = false;
+        emit gameOver();
+    }
+
+    // call checkCollision on snakeHead and create new food if return value is true
+    if (snakeHead->checkFoodCollision(foodPos)) {
+        generateNewFood();
+        update();
+        snakeHead->addChild();
+    }
 }
 
 void GameWidget::resume() {
-    running = true;
+    Options::running = true;
 }
 
 void GameWidget::pause() {
-    running = false;
+    Options::running = false;
 }
