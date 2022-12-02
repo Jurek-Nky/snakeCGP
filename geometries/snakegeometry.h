@@ -9,15 +9,21 @@
 
 class SnakeGeometry : protected QOpenGLFunctions {
 public:
-    explicit SnakeGeometry(QMatrix4x4 model);
+    explicit SnakeGeometry(QMatrix4x4);
 
     virtual ~SnakeGeometry();
 
-    void drawSnakeGeometry(QOpenGLShaderProgram *program, QMatrix4x4 projection);
+    void drawSnakeGeometry(QOpenGLShaderProgram *, QMatrix4x4);
 
     void addChild();
 
-    void move(QMatrix4x4 parent);
+    void move(QMatrix4x4, QVector3D);
+
+    bool checkCollision(QVector3D);
+
+    bool checkFoodCollision(QVector3D);
+
+    bool isHead = false;
 
 private:
     QMatrix4x4 modelMatrix;
@@ -33,6 +39,10 @@ private:
     QOpenGLTexture *texture;
 
     SnakeGeometry *child = nullptr;
+
+
+protected:
+    QVector3D position;
 };
 
 

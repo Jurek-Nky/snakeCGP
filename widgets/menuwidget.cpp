@@ -1,7 +1,7 @@
 #include <iostream>
 #include "menuwidget.h"
 #include "../ui_menuwidget.h"
-#include "../widgetstack.h"
+#include "widgetstack.h"
 
 
 MenuWidget::MenuWidget(QWidget *parent) :

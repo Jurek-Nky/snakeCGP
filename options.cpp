@@ -15,3 +15,7 @@ int Options::soundOverallLevel = 100;
 bool Options::camThirdPersonEnabled = false;
 float Options::camZoom = 1.0f;
 
+float Options::boardSize = 30;
+
+bool Options::running = true;
+

@@ -4,7 +4,7 @@
 
 #ifndef QT_NO_OPENGL
 
-#include "widgetstack.h"
+#include "widgets/widgetstack.h"
 
 #endif
 

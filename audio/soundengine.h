@@ -30,9 +30,9 @@ public slots:
 
     void playEatingSound();
 
-    void playDeathSound();
-
     void playMenuMusic();
+
+    void playGameOver();
 };
 
 
