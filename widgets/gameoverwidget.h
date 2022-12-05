@@ -7,21 +7,17 @@
 
 #include <QWidget>
 
-
-QT_BEGIN_NAMESPACE
-namespace Ui { class GameOverWidget; }
-QT_END_NAMESPACE
-
 class GameOverWidget : public QWidget {
 Q_OBJECT
 
 public:
+    using QWidget = QWidget;
+
     explicit GameOverWidget(QWidget *parent = nullptr);
 
     ~GameOverWidget() override;
 
 private:
-    Ui::GameOverWidget *ui;
 };
 
 

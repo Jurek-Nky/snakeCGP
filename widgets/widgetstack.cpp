@@ -2,9 +2,6 @@
 #include <QKeyEvent>
 #include <iostream>
 #include "widgetstack.h"
-#include "menuwidget.h"
-#include "openglwidget.h"
-#include "gameoverwidget.h"
 
 WidgetStack::WidgetStack(QWidget *parent) : QWidget(parent) {
 
