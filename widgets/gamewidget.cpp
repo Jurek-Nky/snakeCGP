@@ -1,4 +1,4 @@
-#include "openglwidget.h"
+#include "gamewidget.h"
 #include "widgetstack.h"
 
 #include <QMouseEvent>
@@ -14,12 +14,13 @@ GameWidget::GameWidget(QWidget *parent)
           plane(nullptr) {
 
     QObject::connect(&updateTimer, SIGNAL(timeout()), this, SLOT(animateGL()));
-    updateTimer.start(18);
+    // 16ms => 60 fps
+    updateTimer.start(16);
     stopWatch.start();
 
     connect(this, SIGNAL(openMenu()), parentWidget(), SLOT(openMenu()));
     connect(this, SIGNAL(gameOver()), parentWidget(), SLOT(gameOver()));
-    connect(this, SIGNAL(toggleMaximized()),parentWidget(), SLOT(toggleMaximized()));
+    connect(this, SIGNAL(toggleMaximized()), parentWidget(), SLOT(toggleMaximized()));
 }
 
 GameWidget::~GameWidget() {
@@ -50,8 +51,6 @@ void GameWidget::initializeGL() {
     time_t nTime;
     srandom(time(&nTime));
 
-    // 16ms => 60 fps
-    timer.start(16, this);
 }
 
 void GameWidget::initComponents() {

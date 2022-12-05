@@ -72,7 +72,6 @@ private:
     QTimer updateTimer;
     QElapsedTimer stopWatch;
 
-    QBasicTimer timer;
     QOpenGLShaderProgram program;
 
     QOpenGLTexture *texture = nullptr;

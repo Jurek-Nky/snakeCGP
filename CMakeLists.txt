@@ -18,7 +18,7 @@ qt6_wrap_ui(widgets/gameoverwidget.h widgets/gameoverwidget.ui)
 qt_add_executable(snake
         main.cpp
         geometries/vertexData.h
-        widgets/openglwidget.cpp widgets/openglwidget.h
+        widgets/gamewidget.cpp widgets/gamewidget.h
         geometries/snakegeometry.cpp geometries/snakegeometry.h
         geometries/planegeometry.cpp geometries/planegeometry.h
         geometries/FoodGeometry.cpp geometries/FoodGeometry.h

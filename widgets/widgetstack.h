@@ -5,9 +5,9 @@
 #include <QStackedWidget>
 #include <QOpenGLFunctions>
 #include "menuwidget.h"
-#include "openglwidget.h"
-#include "../audio/soundengine.h"
+#include "gamewidget.h"
 #include "gameoverwidget.h"
+#include "../audio/soundengine.h"
 
 class WidgetStack : public QWidget {
 Q_OBJECT
