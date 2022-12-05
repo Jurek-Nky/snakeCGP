@@ -13,7 +13,6 @@ set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/opengl/snake")
 find_package(Qt6 REQUIRED COMPONENTS Core Gui OpenGL OpenGLWidgets Widgets Multimedia MultimediaWidgets)
 
 qt6_wrap_ui(widgets/menuwidget.h widgets/menuwidget.ui)
-qt6_wrap_ui(widgets/gameoverwidget.h widgets/gameoverwidget.ui)
 
 qt_add_executable(snake
         main.cpp
@@ -25,7 +24,7 @@ qt_add_executable(snake
         widgets/menuwidget.cpp widgets/menuwidget.h widgets/menuwidget.ui
         widgets/widgetstack.cpp widgets/widgetstack.h
         options.cpp options.h
-        widgets/gameoverwidget.cpp widgets/gameoverwidget.h widgets/gameoverwidget.ui
+        widgets/gameoverwidget.cpp widgets/gameoverwidget.h
         audio/soundengine.cpp audio/soundengine.h
         shaders.qrc
         resources.qrc
