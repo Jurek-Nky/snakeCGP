@@ -1,105 +1,105 @@
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
-#include "../geometries/snakegeometry.h"
-#include "../geometries/planegeometry.h"
 #include "../geometries/FoodGeometry.h"
+#include "../geometries/planegeometry.h"
+#include "../geometries/snakegeometry.h"
 #include "../options.h"
 
-#include <QOpenGLWidget>
-#include <QOpenGLFunctions>
-#include <QMatrix4x4>
-#include <QQuaternion>
-#include <QVector2D>
 #include <QBasicTimer>
+#include <QElapsedTimer>
+#include <QMatrix4x4>
+#include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLTexture>
+#include <QOpenGLWidget>
+#include <QQuaternion>
 #include <QTimer>
-#include <QElapsedTimer>
+#include <QVector2D>
 
-enum Directions {
-    LEFT, RIGHT, UP, DOWN
-};
+enum Directions { LEFT, RIGHT, UP, DOWN };
 
 class GameWidget : public QOpenGLWidget, protected QOpenGLFunctions {
-Q_OBJECT
+  Q_OBJECT
 
 public:
-    using QOpenGLWidget::QOpenGLWidget;
+  using QOpenGLWidget::QOpenGLWidget;
 
-    GameWidget(QWidget *parent);
+  GameWidget(QWidget *parent);
 
-    ~GameWidget();
+  ~GameWidget();
 
-private
-    slots:
+private slots:
 
-    void animateGL();
+  void animateGL();
 
-    void resume();
+  void resume();
 
-    void pause();
+  void pause();
 
 signals:
 
-    void openMenu();
-    void gameOver();
-    void toggleMaximized();
+  void openMenu();
+
+  void gameOver();
+
+  void toggleMaximized();
 
 protected:
-    void keyPressEvent(QKeyEvent *e) override;
+  void keyPressEvent(QKeyEvent *e) override;
 
-    void keyReleaseEvent(QKeyEvent *e) override;
+  void keyReleaseEvent(QKeyEvent *e) override;
 
-    void mousePressEvent(QMouseEvent *e) override;
+  void mousePressEvent(QMouseEvent *e) override;
 
-    void mouseReleaseEvent(QMouseEvent *e) override;
+  void mouseReleaseEvent(QMouseEvent *e) override;
 
-    void timerEvent(QTimerEvent *e) override;
+  void timerEvent(QTimerEvent *e) override;
 
-    void initializeGL() Q_DECL_OVERRIDE;
+  void initializeGL() Q_DECL_OVERRIDE;
 
-    void resizeGL(int w, int h) Q_DECL_OVERRIDE;
+  void resizeGL(int w, int h) Q_DECL_OVERRIDE;
 
-    void paintGL() Q_DECL_OVERRIDE;
+  void paintGL() Q_DECL_OVERRIDE;
 
-
-    void initShaders();
-
+  void initShaders();
 
 private:
+  QTimer updateTimer;
 
-    QTimer updateTimer;
-    QElapsedTimer stopWatch;
+  QElapsedTimer stopWatch;
 
-    QOpenGLShaderProgram program;
+  QOpenGLShaderProgram program;
 
-    QOpenGLTexture *texture = nullptr;
+  QOpenGLTexture *texture = nullptr;
 
+  Directions direction;
 
-    Directions direction;
+  bool singleStep;
 
-    bool singleStep;
+  QVector3D snakeHeadPos;
 
-    QVector3D snakeHeadPos;
-    QVector3D foodPos;
+  QVector3D foodPos;
 
-    SnakeGeometry *snakeHead = nullptr;
-    PlaneGeometry *plane = nullptr;
-    FoodGeometry *food = nullptr;
+  SnakeGeometry *snakeHead = nullptr;
 
-    QMatrix4x4 projection;
-    QMatrix4x4 viewMatrix;
+  PlaneGeometry *plane = nullptr;
 
-    void updateSnakePosition();
+  FoodGeometry *food = nullptr;
 
-    void initComponents();
+  QMatrix4x4 projection;
 
-    void generateNewFood();
+  QMatrix4x4 viewMatrix;
 
-    void checkCollisions();
+  void updateSnakePosition();
 
-    void moveSnakeHead();
+  void initComponents();
+
+  void generateNewFood();
+
+  void checkCollisions();
+
+  void moveSnakeHead();
 };
 
 #endif // MAINWIDGET_H

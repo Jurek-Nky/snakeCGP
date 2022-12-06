@@ -4,9 +4,9 @@
 #include <QVector3D>
 
 struct VertexData {
-    QVector3D position;
-    QVector2D uv;
-    QVector3D normal;
+  QVector3D position;
+  QVector2D uv;
+  QVector3D normal;
 };
 
-#endif //SNAKECGP_VERTEXDATA_H
+#endif // SNAKECGP_VERTEXDATA_H
