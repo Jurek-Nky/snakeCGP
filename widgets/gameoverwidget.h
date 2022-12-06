@@ -8,17 +8,16 @@
 #include <QWidget>
 
 class GameOverWidget : public QWidget {
-Q_OBJECT
+  Q_OBJECT
 
 public:
-    using QWidget = QWidget;
+  using QWidget = QWidget;
 
-    explicit GameOverWidget(QWidget *parent = nullptr);
+  explicit GameOverWidget(QWidget *parent = nullptr);
 
-    ~GameOverWidget() override;
+  ~GameOverWidget() override;
 
 private:
 };
 
-
-#endif //SNAKECGP_GAMEOVERWIDGET_H
+#endif // SNAKECGP_GAMEOVERWIDGET_H

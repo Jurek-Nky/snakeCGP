@@ -1,43 +1,43 @@
 #ifndef SNAKECGP_MENUWIDGET_H
 #define SNAKECGP_MENUWIDGET_H
 
-#include <QWidget>
 #include "../options.h"
+#include <QWidget>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MenuWidget; }
+namespace Ui {
+class MenuWidget;
+}
 QT_END_NAMESPACE
 
-
 class MenuWidget : public QWidget {
-Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit MenuWidget(QWidget *parent);
+  explicit MenuWidget(QWidget *parent);
 
-    ~MenuWidget() override;
+  ~MenuWidget() override;
 
 public slots:
 
-    void changeMusicLevel(int);
+  void changeMusicLevel(int);
 
-    void changeSoundEffectLevel(int);
+  void changeSoundEffectLevel(int);
 
-    void changeSoundOverallLevel(int);
+  void changeSoundOverallLevel(int);
 
-    void setMusicEnabled(bool);
+  void setMusicEnabled(bool);
 
-    void setSoundEffectsEnabled(bool);
+  void setSoundEffectsEnabled(bool);
 
-    void setSoundEnabled(bool);
+  void setSoundEnabled(bool);
 
 signals:
 
-    void updateAudio();
+  void updateAudio();
 
 private:
-    Ui::MenuWidget *ui;
+  Ui::MenuWidget *ui;
 };
 
-
-#endif //SNAKECGP_MENUWIDGET_H
+#endif // SNAKECGP_MENUWIDGET_H
