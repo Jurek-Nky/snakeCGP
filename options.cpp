@@ -23,3 +23,5 @@ float Options::camZoom = 1.0f;
 float Options::boardSize = 30;
 
 bool Options::running = true;
+
+int Options::score = 0;

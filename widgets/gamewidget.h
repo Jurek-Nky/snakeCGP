@@ -65,6 +65,8 @@ protected:
   void initShaders();
 
 private:
+  int score = 0;
+
   QTimer updateTimer;
 
   QElapsedTimer stopWatch;

@@ -22,6 +22,8 @@ public:
   static float boardSize;
 
   static bool running;
+
+  static int score;
 };
 
 #endif // SNAKECGP_OPTIONS_H

@@ -7,6 +7,9 @@
 #include <QOpenGLTexture>
 #include <vector>
 
+enum Corner { TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, NO_CORNER };
+enum Orientation { X, Y };
+
 class SnakeGeometry : protected QOpenGLFunctions {
 public:
   explicit SnakeGeometry(QMatrix4x4);
@@ -25,6 +28,10 @@ public:
 
   bool isHead = false;
 
+  bool isTail = false;
+
+  Orientation orientation;
+
 private:
   QMatrix4x4 modelMatrix;
 
@@ -32,7 +39,8 @@ private:
 
   void initSnakeGeometry();
 
-  void initVertex(int latitudeBands, int longitudeBands);
+  void initVertex(float radius, float height, int verticalResolution,
+                  int horizontalResolution, bool corner);
 
   QOpenGLBuffer arrayBuffer;
 
@@ -41,6 +49,9 @@ private:
   QOpenGLTexture *texture;
 
   SnakeGeometry *child = nullptr;
+
+
+  Corner corner;
 
 protected:
   QVector3D position;

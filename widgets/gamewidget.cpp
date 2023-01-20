@@ -85,6 +85,7 @@ void GameWidget::initComponents() {
 }
 
 void GameWidget::generateNewFood() {
+  Options::score++;
   foodPos =
       QVector3D(std::fmod(random(), Options::boardSize - 2.0f) + 1.0f,
                 std::fmod(random(), Options::boardSize - 2.0f) + 1.0f, 0.0f);
@@ -227,15 +228,19 @@ void GameWidget::moveSnakeHead() {
   switch (direction) {
   case RIGHT:
     snakeHeadPos.setX(snakeHeadPos.x() + 1.0f);
+    snakeHead->orientation = X;
     break;
   case LEFT:
     snakeHeadPos.setX(snakeHeadPos.x() - 1.0f);
+    snakeHead->orientation = X;
     break;
   case UP:
     snakeHeadPos.setY(snakeHeadPos.y() + 1.0f);
+    snakeHead->orientation = Y;
     break;
   case DOWN:
     snakeHeadPos.setY(snakeHeadPos.y() - 1.0f);
+    snakeHead->orientation = Y;
     break;
   }
   QMatrix4x4 snakeHeadMatrix = viewMatrix;
