@@ -135,25 +135,25 @@ void GameWidget::keyPressEvent(QKeyEvent *e) {
   case Qt::Key_Right:
   case Qt::Key_L:
     if (direction != LEFT) {
-      direction = RIGHT;
+      newDirection = RIGHT;
     }
     break;
   case Qt::Key_Left:
   case Qt::Key_H:
     if (direction != RIGHT) {
-      direction = LEFT;
+      newDirection = LEFT;
     }
     break;
   case Qt::Key_Up:
   case Qt::Key_K:
     if (direction != DOWN) {
-      direction = UP;
+      newDirection = UP;
     }
     break;
   case Qt::Key_Down:
   case Qt::Key_J:
     if (direction != UP) {
-      direction = DOWN;
+      newDirection = DOWN;
     }
     break;
   case Qt::Key_Space:
@@ -216,7 +216,7 @@ void GameWidget::animateGL() {
     moveSnakeHead();
     update();
     singleStep = false;
-  } else if (timeElapsedMs > 150 && Options::running) {
+  } else if (timeElapsedMs > 15 && Options::running) {
     stopWatch.restart();
     moveSnakeHead();
     update();
@@ -225,21 +225,28 @@ void GameWidget::animateGL() {
 }
 
 void GameWidget::moveSnakeHead() {
+
+  float whole;
+  double fractionalX = modff(snakeHeadPos.x(), &whole);
+  double fractionalY = modff(snakeHeadPos.y(), &whole);
+  if (fractionalX < 0.1 && fractionalY < 0.1) {
+    direction = newDirection;
+  }
   switch (direction) {
   case RIGHT:
-    snakeHeadPos.setX(snakeHeadPos.x() + 1.0f);
+    snakeHeadPos.setX(snakeHeadPos.x() + 0.1);
     snakeHead->orientation = X;
     break;
   case LEFT:
-    snakeHeadPos.setX(snakeHeadPos.x() - 1.0f);
+    snakeHeadPos.setX(snakeHeadPos.x() - 0.1);
     snakeHead->orientation = X;
     break;
   case UP:
-    snakeHeadPos.setY(snakeHeadPos.y() + 1.0f);
+    snakeHeadPos.setY(snakeHeadPos.y() + 0.1);
     snakeHead->orientation = Y;
     break;
   case DOWN:
-    snakeHeadPos.setY(snakeHeadPos.y() - 1.0f);
+    snakeHeadPos.setY(snakeHeadPos.y() - 0.1);
     snakeHead->orientation = Y;
     break;
   }

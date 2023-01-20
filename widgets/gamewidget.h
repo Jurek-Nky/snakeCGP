@@ -77,6 +77,8 @@ private:
 
   Directions direction;
 
+  Directions newDirection;
+
   bool singleStep;
 
   QVector3D snakeHeadPos;

@@ -169,7 +169,12 @@ void SnakeGeometry::drawSnakeGeometry(QOpenGLShaderProgram *program,
 // returns true if position == snakePosition otherwise it returns the call
 // to its child
 bool SnakeGeometry::checkCollision(QVector3D vector) {
-  if (position == vector and !isHead) {
+  vector = QVector3D(floor(vector.x() * 10) / 10, floor(vector.y() * 10) / 10,
+                     floor(vector.z() * 10) / 10);
+  position =
+      QVector3D(floor(position.x() * 10) / 10, floor(position.y() * 10) / 10,
+                floor(position.z() * 10) / 10);
+  if (position == vector && !isHead) {
     return true;
   }
   if (child != nullptr) {
