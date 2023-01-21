@@ -10,9 +10,13 @@ GameWidget::GameWidget(QWidget *parent)
     : QOpenGLWidget(parent), updateTimer(this), stopWatch(), snakeHead(nullptr),
       plane(nullptr) {
 
-  QObject::connect(&updateTimer, SIGNAL(timeout()), this, SLOT(animateGL()));
+  QObject::connect(&animationTimer, SIGNAL(timeout()), this, SLOT(animateGL()));
+  QObject::connect(&updateTimer, SIGNAL(timeout()), this,
+                   SLOT(updateSnakeHead()));
   // 16ms => 60 fps
-  updateTimer.start(16);
+  animationTimer.start(16);
+  updateTimer.start(Options::speed);
+
   stopWatch.start();
 
   connect(this, SIGNAL(openMenu()), parentWidget(), SLOT(openMenu()));
@@ -102,11 +106,17 @@ void GameWidget::generateNewFood() {
 
   QMatrix4x4 foodMatrix = viewMatrix;
   // move foodMatrix to the bottom left corner
-  foodMatrix.translate(std::round(-Options::boardSize / 2),
-                       std::round(-Options::boardSize / 2), 0.f);
+  foodMatrix.translate(std::floor(-Options::boardSize / 2) - 1,
+                       std::floor(-Options::boardSize / 2) - 1, 0.f);
   // foodMatrix needs to be translated to the foodPosition
   foodMatrix.translate(foodPos);
   food = new FoodGeometry(foodMatrix);
+
+  if (Options::speed > 100 && Options::score % 5 == 0) {
+    Options::speed = Options::speed - 5;
+    updateTimer.start(Options::speed);
+    std::cout << Options::speed << std::endl;
+  }
 }
 
 void GameWidget::initShaders() {
@@ -211,70 +221,84 @@ void GameWidget::paintGL() {
 }
 
 void GameWidget::animateGL() {
-  qint64 timeElapsedMs = stopWatch.nsecsElapsed() / 1000000;
   if (singleStep && !Options::running) {
-    moveSnakeHead();
-    update();
+    updateSnakeHead();
+    animateSnake();
     singleStep = false;
-  } else if (timeElapsedMs > 15 && Options::running) {
-    stopWatch.restart();
-    moveSnakeHead();
-    update();
+  } else if (Options::running) {
+    animateSnake();
   }
   update();
 }
 
-void GameWidget::moveSnakeHead() {
-
-  float whole;
-  double fractionalX = modff(snakeHeadPos.x(), &whole);
-  double fractionalY = modff(snakeHeadPos.y(), &whole);
-  if (fractionalX < 0.1 && fractionalY < 0.1) {
-    direction = newDirection;
+void GameWidget::updateSnakeHead() {
+  if (!Options::running) {
+    return;
+  }
+  stopWatch.restart();
+  direction = newDirection;
+  if (snakeHead->checkFoodCollision(foodPos)) {
+    snakeHead->addChild();
+    generateNewFood();
   }
   switch (direction) {
-  case RIGHT:
-    snakeHeadPos.setX(snakeHeadPos.x() + 0.1);
-    snakeHead->orientation = X;
-    break;
-  case LEFT:
-    snakeHeadPos.setX(snakeHeadPos.x() - 0.1);
-    snakeHead->orientation = X;
-    break;
   case UP:
-    snakeHeadPos.setY(snakeHeadPos.y() + 0.1);
+    snakeHeadPos.setY(snakeHeadPos.y() + 1.0f);
     snakeHead->orientation = Y;
     break;
   case DOWN:
-    snakeHeadPos.setY(snakeHeadPos.y() - 0.1);
+    snakeHeadPos.setY(snakeHeadPos.y() - 1.0f);
     snakeHead->orientation = Y;
     break;
+  case LEFT:
+    snakeHeadPos.setX(snakeHeadPos.x() - 1.0f);
+    snakeHead->orientation = X;
+    break;
+  case RIGHT:
+    snakeHead->orientation = X;
+    snakeHeadPos.setX(snakeHeadPos.x() + 1.0f);
+    break;
   }
-  QMatrix4x4 snakeHeadMatrix = viewMatrix;
-  snakeHeadMatrix.translate(floor(-Options::boardSize / 2),
-                            floor(-Options::boardSize / 2), 0.f);
-  snakeHeadMatrix.translate(snakeHeadPos);
-  snakeHead->move(snakeHeadMatrix, snakeHeadPos);
-
-  if (snakeHeadPos.x() < 0 || snakeHeadPos.x() > Options::boardSize - 1 ||
-      snakeHeadPos.y() < 0 || snakeHeadPos.y() > Options::boardSize - 1) {
-    Options::running = false;
-    emit gameOver();
-  }
-
-  // check if snakeHead collides with itself
   if (snakeHead->checkCollision(snakeHeadPos)) {
+    std::cout << "snake collided with itself" << std::endl;
+    Options::running = false;
+    emit gameOver();
+  }
+  if (snakeHeadPos.x() > Options::boardSize + 1 || snakeHeadPos.x() < 1 ||
+      snakeHeadPos.y() > Options::boardSize + 1 || snakeHeadPos.y() < 1) {
+    std::cout << "snake collided with wall" << std::endl;
     Options::running = false;
     emit gameOver();
   }
 
-  // call checkCollision on snakeHead and create new food if return value is
-  // true
-  if (snakeHead->checkFoodCollision(foodPos)) {
-    generateNewFood();
-    update();
-    snakeHead->addChild();
+  snakeHead->move(snakeHeadPos);
+}
+
+void GameWidget::animateSnake() {
+  uint elapsedInMs = stopWatch.nsecsElapsed() / 1000000;
+  float percentage = float(elapsedInMs) / Options::speed;
+
+  QMatrix4x4 snakeHeadMatrix = viewMatrix;
+  // move snakeHeadMatrix to the bottom left corner
+  snakeHeadMatrix.translate(std::floor(-Options::boardSize / 2) - 1,
+                            std::floor(-Options::boardSize / 2) - 1, 0.f);
+  QVector3D directionVec;
+  switch (direction) {
+  case UP:
+    directionVec = QVector3D(0.0f, 1.0f, 0.0f);
+    break;
+  case DOWN:
+    directionVec = QVector3D(0.0f, -1.0f, 0.0f);
+    break;
+  case LEFT:
+    directionVec = QVector3D(-1.0f, 0.0f, 0.0f);
+    break;
+  case RIGHT:
+    directionVec = QVector3D(1.0f, 0.0f, 0.0f);
+    break;
   }
+
+  snakeHead->animate(percentage, directionVec, snakeHeadMatrix);
 }
 
 void GameWidget::resume() { Options::running = true; }

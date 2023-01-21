@@ -24,6 +24,9 @@ public:
   static bool running;
 
   static int score;
+
+  // ms per move
+  static int speed;
 };
 
 #endif // SNAKECGP_OPTIONS_H

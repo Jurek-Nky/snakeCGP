@@ -33,6 +33,8 @@ private slots:
 
   void animateGL();
 
+  void updateSnakeHead();
+
   void resume();
 
   void pause();
@@ -69,6 +71,8 @@ private:
 
   QTimer updateTimer;
 
+  QTimer animationTimer;
+
   QElapsedTimer stopWatch;
 
   QOpenGLShaderProgram program;
@@ -95,7 +99,6 @@ private:
 
   QMatrix4x4 viewMatrix;
 
-  void updateSnakePosition();
 
   void initComponents();
 
@@ -103,7 +106,7 @@ private:
 
   void checkCollisions();
 
-  void moveSnakeHead();
+  void animateSnake();
 };
 
 #endif // MAINWIDGET_H

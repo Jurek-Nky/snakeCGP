@@ -20,7 +20,9 @@ public:
 
   void addChild();
 
-  void move(QMatrix4x4, QVector3D);
+  void move(QVector3D pos);
+
+  void animate(float percentage, QVector3D direction, QMatrix4x4 modelView);
 
   bool checkCollision(QVector3D);
 
@@ -49,7 +51,6 @@ private:
   QOpenGLTexture *texture;
 
   SnakeGeometry *child = nullptr;
-
 
   Corner corner;
 

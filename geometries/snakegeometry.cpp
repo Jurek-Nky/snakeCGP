@@ -1,5 +1,6 @@
 #include "snakegeometry.h"
 #include "vertexData.h"
+#include <iostream>
 
 SnakeGeometry::SnakeGeometry(QMatrix4x4 model)
     : indexBuffer(QOpenGLBuffer::IndexBuffer), texture(nullptr) {
@@ -42,14 +43,22 @@ void SnakeGeometry::addChild() {
   child->addChild();
 }
 
-void SnakeGeometry::move(QMatrix4x4 parent, QVector3D pos) {
+void SnakeGeometry::move(QVector3D pos) {
   if (child != nullptr) {
-    child->move(modelMatrix, position);
-    child->position = position;
+    child->move(position);
     child->orientation = orientation;
   }
   position = pos;
-  modelMatrix = parent;
+}
+
+void SnakeGeometry::animate(float percentage, QVector3D direction,
+                            QMatrix4x4 modelView) {
+  if (child != nullptr) {
+    child->animate(percentage, position - child->position, modelView);
+  }
+
+  modelView.translate(position - direction + direction * percentage);
+  modelMatrix = modelView;
 }
 
 // create a solid cylinder with closed ends
@@ -169,11 +178,6 @@ void SnakeGeometry::drawSnakeGeometry(QOpenGLShaderProgram *program,
 // returns true if position == snakePosition otherwise it returns the call
 // to its child
 bool SnakeGeometry::checkCollision(QVector3D vector) {
-  vector = QVector3D(floor(vector.x() * 10) / 10, floor(vector.y() * 10) / 10,
-                     floor(vector.z() * 10) / 10);
-  position =
-      QVector3D(floor(position.x() * 10) / 10, floor(position.y() * 10) / 10,
-                floor(position.z() * 10) / 10);
   if (position == vector && !isHead) {
     return true;
   }

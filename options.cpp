@@ -25,3 +25,5 @@ float Options::boardSize = 30;
 bool Options::running = true;
 
 int Options::score = 0;
+
+int Options::speed = 200;
