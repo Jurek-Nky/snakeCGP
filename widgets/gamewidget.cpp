@@ -115,7 +115,6 @@ void GameWidget::generateNewFood() {
   if (Options::speed > 100 && Options::score % 5 == 0) {
     Options::speed = Options::speed - 5;
     updateTimer.start(Options::speed);
-    std::cout << Options::speed << std::endl;
   }
 }
 
@@ -139,59 +138,6 @@ void GameWidget::initShaders() {
   if (!program.bind())
     close();
 }
-
-void GameWidget::keyPressEvent(QKeyEvent *e) {
-  switch (e->key()) {
-  case Qt::Key_Right:
-  case Qt::Key_L:
-    if (direction != LEFT) {
-      newDirection = RIGHT;
-    }
-    break;
-  case Qt::Key_Left:
-  case Qt::Key_H:
-    if (direction != RIGHT) {
-      newDirection = LEFT;
-    }
-    break;
-  case Qt::Key_Up:
-  case Qt::Key_K:
-    if (direction != DOWN) {
-      newDirection = UP;
-    }
-    break;
-  case Qt::Key_Down:
-  case Qt::Key_J:
-    if (direction != UP) {
-      newDirection = DOWN;
-    }
-    break;
-  case Qt::Key_Space:
-    Options::running = !Options::running;
-    break;
-  case Qt::Key_Comma:
-    singleStep = true;
-    break;
-  case Qt::Key_Q:
-    exit(0);
-    break;
-  case Qt::Key_F:
-    emit toggleMaximized();
-    break;
-  case Qt::Key_Escape:
-    Options::running = false;
-    emit openMenu();
-    break;
-  }
-}
-
-void GameWidget::keyReleaseEvent(QKeyEvent *e) {}
-
-void GameWidget::mousePressEvent(QMouseEvent *e) {}
-
-void GameWidget::mouseReleaseEvent(QMouseEvent *e) {}
-
-void GameWidget::timerEvent(QTimerEvent *timerEvent) {}
 
 void GameWidget::resizeGL(int w, int h) {
   // Calculate aspect ratio
@@ -304,3 +250,65 @@ void GameWidget::animateSnake() {
 void GameWidget::resume() { Options::running = true; }
 
 void GameWidget::pause() { Options::running = false; }
+
+void GameWidget::wheelEvent(QWheelEvent *e) {
+  float delta = e->angleDelta().y() / 100.0f;
+  Options::camZoom += delta;
+  if (Options::camZoom > 30.0f) {
+    Options::camZoom = 30.0f;
+    return;
+  } else if (Options::camZoom < -30) {
+    Options::camZoom = -30;
+    return;
+  }
+  projection.translate(0.0f, 0.0f, delta);
+}
+void GameWidget::keyPressEvent(QKeyEvent *e) {
+  switch (e->key()) {
+  case Qt::Key_Right:
+  case Qt::Key_L:
+    if (direction != LEFT) {
+      newDirection = RIGHT;
+    }
+    break;
+  case Qt::Key_Left:
+  case Qt::Key_H:
+    if (direction != RIGHT) {
+      newDirection = LEFT;
+    }
+    break;
+  case Qt::Key_Up:
+  case Qt::Key_K:
+    if (direction != DOWN) {
+      newDirection = UP;
+    }
+    break;
+  case Qt::Key_Down:
+  case Qt::Key_J:
+    if (direction != UP) {
+      newDirection = DOWN;
+    }
+    break;
+  case Qt::Key_Space:
+    Options::running = !Options::running;
+    break;
+  case Qt::Key_Comma:
+    singleStep = true;
+    break;
+  case Qt::Key_Q:
+    exit(0);
+    break;
+  case Qt::Key_F:
+    emit toggleMaximized();
+    break;
+  case Qt::Key_Escape:
+    Options::running = false;
+    emit openMenu();
+    break;
+  }
+}
+void GameWidget::keyReleaseEvent(QKeyEvent *e) {}
+
+void GameWidget::mousePressEvent(QMouseEvent *e) {}
+
+void GameWidget::mouseReleaseEvent(QMouseEvent *e) {}

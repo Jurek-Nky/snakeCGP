@@ -56,7 +56,7 @@ protected:
 
   void mouseReleaseEvent(QMouseEvent *e) override;
 
-  void timerEvent(QTimerEvent *e) override;
+  void wheelEvent(QWheelEvent *e) override;
 
   void initializeGL() Q_DECL_OVERRIDE;
 
@@ -98,7 +98,6 @@ private:
   QMatrix4x4 projection;
 
   QMatrix4x4 viewMatrix;
-
 
   void initComponents();
 
