@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'gameoverwidget.ui'
 **
-** Created by: Qt User Interface Compiler version 6.3.1
+** Created by: Qt User Interface Compiler version 6.4.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -11,9 +11,12 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QTableView>
 #include <QtWidgets/QVBoxLayout>
@@ -24,58 +27,69 @@ QT_BEGIN_NAMESPACE
 class Ui_GameOverWidget
 {
 public:
-    QHBoxLayout *horizontalLayout_2;
-    QWidget *widget;
-    QVBoxLayout *verticalLayout_3;
-    QWidget *widget_3;
     QVBoxLayout *verticalLayout;
     QLabel *scoreLabel;
-    QWidget *widget_2;
+    QWidget *widget;
     QHBoxLayout *horizontalLayout;
-    QSpacerItem *horizontalSpacer;
-    QTableView *scoreboardTable;
+    QFormLayout *formLayout;
+    QSpacerItem *verticalSpacer;
+    QLabel *nameLabel;
+    QLineEdit *nameInput;
+    QPushButton *nameButton;
+    QSpacerItem *verticalSpacer_2;
+    QTableView *tableView;
 
     void setupUi(QWidget *GameOverWidget)
     {
         if (GameOverWidget->objectName().isEmpty())
-            GameOverWidget->setObjectName(QString::fromUtf8("GameOverWidget"));
-        GameOverWidget->resize(892, 745);
-        horizontalLayout_2 = new QHBoxLayout(GameOverWidget);
-        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
-        widget = new QWidget(GameOverWidget);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        verticalLayout_3 = new QVBoxLayout(widget);
-        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
-        widget_3 = new QWidget(widget);
-        widget_3->setObjectName(QString::fromUtf8("widget_3"));
-        verticalLayout = new QVBoxLayout(widget_3);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        scoreLabel = new QLabel(widget_3);
-        scoreLabel->setObjectName(QString::fromUtf8("scoreLabel"));
+            GameOverWidget->setObjectName("GameOverWidget");
+        GameOverWidget->resize(1042, 664);
+        verticalLayout = new QVBoxLayout(GameOverWidget);
+        verticalLayout->setObjectName("verticalLayout");
+        scoreLabel = new QLabel(GameOverWidget);
+        scoreLabel->setObjectName("scoreLabel");
 
         verticalLayout->addWidget(scoreLabel);
 
+        widget = new QWidget(GameOverWidget);
+        widget->setObjectName("widget");
+        horizontalLayout = new QHBoxLayout(widget);
+        horizontalLayout->setObjectName("horizontalLayout");
+        formLayout = new QFormLayout();
+        formLayout->setObjectName("formLayout");
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        verticalLayout_3->addWidget(widget_3);
+        formLayout->setItem(0, QFormLayout::FieldRole, verticalSpacer);
 
-        widget_2 = new QWidget(widget);
-        widget_2->setObjectName(QString::fromUtf8("widget_2"));
-        horizontalLayout = new QHBoxLayout(widget_2);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        nameLabel = new QLabel(widget);
+        nameLabel->setObjectName("nameLabel");
 
-        horizontalLayout->addItem(horizontalSpacer);
+        formLayout->setWidget(1, QFormLayout::LabelRole, nameLabel);
 
-        scoreboardTable = new QTableView(widget_2);
-        scoreboardTable->setObjectName(QString::fromUtf8("scoreboardTable"));
+        nameInput = new QLineEdit(widget);
+        nameInput->setObjectName("nameInput");
 
-        horizontalLayout->addWidget(scoreboardTable);
+        formLayout->setWidget(1, QFormLayout::FieldRole, nameInput);
+
+        nameButton = new QPushButton(widget);
+        nameButton->setObjectName("nameButton");
+
+        formLayout->setWidget(2, QFormLayout::FieldRole, nameButton);
+
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        formLayout->setItem(3, QFormLayout::FieldRole, verticalSpacer_2);
 
 
-        verticalLayout_3->addWidget(widget_2);
+        horizontalLayout->addLayout(formLayout);
+
+        tableView = new QTableView(widget);
+        tableView->setObjectName("tableView");
+
+        horizontalLayout->addWidget(tableView);
 
 
-        horizontalLayout_2->addWidget(widget);
+        verticalLayout->addWidget(widget);
 
 
         retranslateUi(GameOverWidget);
@@ -85,8 +99,10 @@ public:
 
     void retranslateUi(QWidget *GameOverWidget)
     {
-        GameOverWidget->setWindowTitle(QCoreApplication::translate("GameOverWidget", "GameOverWidget", nullptr));
+        GameOverWidget->setWindowTitle(QCoreApplication::translate("GameOverWidget", "MenuWidget", nullptr));
         scoreLabel->setText(QCoreApplication::translate("GameOverWidget", "TextLabel", nullptr));
+        nameLabel->setText(QCoreApplication::translate("GameOverWidget", "Enter your Name", nullptr));
+        nameButton->setText(QCoreApplication::translate("GameOverWidget", "PushButton", nullptr));
     } // retranslateUi
 
 };

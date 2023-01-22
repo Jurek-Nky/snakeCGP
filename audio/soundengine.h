@@ -9,31 +9,29 @@
 #include <QtMultimedia/QMediaPlayer>
 
 class SoundEngine : public QWidget {
-Q_OBJECT
+  Q_OBJECT
 public:
-    SoundEngine();
+  SoundEngine();
 
-    void playMusic();
+  void playMusic();
 
 private:
-    QMediaPlayer *musicPlayer;
-    QAudioOutput *musicOutput;
-    QMediaPlayer *effectPlayer;
-    QAudioOutput *effectOutput;
-
+  QMediaPlayer *musicPlayer;
+  QAudioOutput *musicOutput;
+  QMediaPlayer *effectPlayer;
+  QAudioOutput *effectOutput;
 
 public slots:
 
-    void updateAudio();
+  void updateAudio();
 
-    void playbackDurationChanged(qint64);
+  void playbackDurationChanged(qint64);
 
-    void playEatingSound();
+  void playEatingSound();
 
-    void playMenuMusic();
+  void playMenuMusic();
 
-    void playGameOver();
+  void playGameOver();
 };
 
-
-#endif //SNAKECGP_SOUNDENGINE_H
+#endif // SNAKECGP_SOUNDENGINE_H

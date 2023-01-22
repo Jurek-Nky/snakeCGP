@@ -5,36 +5,35 @@
 #ifndef SNAKECGP_FOODGEOMETRY_H
 #define SNAKECGP_FOODGEOMETRY_H
 
-
+#include <QFile>
 #include <QMatrix4x4>
+#include <QOpenGLBuffer>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
-#include <QOpenGLBuffer>
-#include <QFile>
+#include <QOpenGLTexture>
 
 class FoodGeometry : QOpenGLFunctions {
 public:
-    explicit FoodGeometry(QMatrix4x4 model);
+  explicit FoodGeometry(QMatrix4x4 model);
 
-    virtual ~FoodGeometry();
+  virtual ~FoodGeometry();
 
-    void drawFoodGeometry(QOpenGLShaderProgram *program, QMatrix4x4 projection);
-
+  void drawFoodGeometry(QOpenGLShaderProgram *program, QMatrix4x4 projection);
 
 private:
-    QMatrix4x4 modelMatrix;
+  QMatrix4x4 modelMatrix;
 
-    void initFoodGeometry();
+  void initFoodGeometry();
 
-    void initVertex();
+  void initVertex();
 
-    void initTexture();
+  void initTexture();
 
-    QOpenGLBuffer arrayBuffer;
-    QOpenGLBuffer indexBuffer;
-    QOpenGLTexture *texture;
+  QOpenGLBuffer arrayBuffer;
+  QOpenGLBuffer indexBuffer;
+  QOpenGLTexture *texture;
 
-    QVector3D position;
+  QVector3D position;
 };
 
-#endif //SNAKECGP_FOODGEOMETRY_H
+#endif // SNAKECGP_FOODGEOMETRY_H
