@@ -17,7 +17,6 @@
 #include <QTimer>
 #include <QVector2D>
 
-enum Directions { LEFT, RIGHT, UP, DOWN };
 
 class GameWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   Q_OBJECT

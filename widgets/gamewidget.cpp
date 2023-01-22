@@ -74,6 +74,8 @@ void GameWidget::initComponents() {
   snakeHeadMatrix.translate(snakeHeadPos);
   snakeHead = new SnakeGeometry(snakeHeadMatrix);
   snakeHead->isHead = true;
+  snakeHead->addChild();
+  snakeHead->addChild();
 
   generateNewFood();
 
@@ -181,6 +183,7 @@ void GameWidget::updateSnakeHead() {
   if (!Options::running) {
     return;
   }
+  Directions oldDirection = direction;
   stopWatch.restart();
   direction = newDirection;
   if (snakeHead->checkFoodCollision(foodPos)) {
@@ -190,19 +193,19 @@ void GameWidget::updateSnakeHead() {
   switch (direction) {
   case UP:
     snakeHeadPos.setY(snakeHeadPos.y() + 1.0f);
-    snakeHead->orientation = Y;
+    snakeHead->newOrientation(Y, oldDirection, direction);
     break;
   case DOWN:
     snakeHeadPos.setY(snakeHeadPos.y() - 1.0f);
-    snakeHead->orientation = Y;
+    snakeHead->newOrientation(Y, oldDirection, direction);
     break;
   case LEFT:
     snakeHeadPos.setX(snakeHeadPos.x() - 1.0f);
-    snakeHead->orientation = X;
+    snakeHead->newOrientation(X, oldDirection, direction);
     break;
   case RIGHT:
-    snakeHead->orientation = X;
     snakeHeadPos.setX(snakeHeadPos.x() + 1.0f);
+    snakeHead->newOrientation(X, oldDirection, direction);
     break;
   }
   if (snakeHead->checkCollision(snakeHeadPos)) {
