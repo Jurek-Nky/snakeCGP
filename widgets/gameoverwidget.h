@@ -20,6 +20,15 @@ public:
 private:
   Ui::GameOverWidget *ui;
 
+  bool nameAdded = false;
+
+  void fillTableFromFile();
+
+public slots:
+  void onNameButtonClicked();
+
+protected:
+  void focusInEvent(QFocusEvent *event) override;
 };
 
 #endif // SNAKECGP_GAMEOVERWIDGET_H

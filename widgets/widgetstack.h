@@ -27,6 +27,8 @@ public slots:
 
   void toggleMaximized();
 
+  void playAgain();
+
 protected:
   void keyPressEvent(QKeyEvent *e) override;
 

@@ -30,7 +30,6 @@ public:
 
 private slots:
 
-  void animateGL();
 
   void updateSnakeHead();
 
@@ -71,8 +70,6 @@ private:
   QTimer updateTimer;
 
   QTimer animationTimer;
-
-  QElapsedTimer stopWatch;
 
   QOpenGLShaderProgram program;
 
