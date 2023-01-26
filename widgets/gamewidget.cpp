@@ -17,6 +17,7 @@ GameWidget::GameWidget(QWidget *parent)
   connect(this, SIGNAL(gameOver()), parentWidget(), SLOT(gameOver()));
   connect(this, SIGNAL(toggleMaximized()), parentWidget(),
           SLOT(toggleMaximized()));
+  Options::speed = 200;
 }
 
 GameWidget::~GameWidget() {
@@ -24,6 +25,9 @@ GameWidget::~GameWidget() {
   // and the buffers.
   makeCurrent();
   delete texture;
+  delete snakeHead;
+  delete food;
+  delete plane;
   doneCurrent();
 }
 
@@ -50,8 +54,7 @@ void GameWidget::initializeGL() {
 void GameWidget::initComponents() {
   // initialize start point for the snake head
   snakeHeadPos =
-      QVector3D(std::fmod(random(), Options::boardSize - 2.0f) + 1.0f,
-                std::fmod(random(), Options::boardSize - 2.0f) + 1.0f, 0.0f);
+      QVector3D(Options::boardSize / 2.0f, Options::boardSize / 2.0f, 0.0f);
   // creating the viewMatrix, that represents the center of the playing field
   viewMatrix = QMatrix4x4();
   viewMatrix.translate(0.0, 0.0, -Options::boardSize * 2);
@@ -83,7 +86,7 @@ void GameWidget::initComponents() {
 }
 
 void GameWidget::generateNewFood() {
-  Options::score++;
+  Options::score += 1;
   foodPos =
       QVector3D(std::fmod(random(), Options::boardSize - 2.0f) + 1.0f,
                 std::fmod(random(), Options::boardSize - 2.0f) + 1.0f, 0.0f);

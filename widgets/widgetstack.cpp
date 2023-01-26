@@ -68,3 +68,13 @@ void WidgetStack::gameOver() {
 void WidgetStack::toggleMaximized() {
   isMaximized() ? showNormal() : showMaximized();
 }
+void WidgetStack::playAgain() {
+  delete game;
+  Options::score = 0;
+  game = new GameWidget(this);
+  stack->addWidget(game);
+  game->setFocus();
+  Options::running = true;
+  stack->setCurrentWidget(game);
+  std::cout << "play again" << std::endl;
+}
