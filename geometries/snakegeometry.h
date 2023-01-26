@@ -27,9 +27,7 @@ public:
 
   void addChild();
 
-  void move(QVector3D pos);
-
-  void animate(float percentage, QVector3D direction, QMatrix4x4 modelView);
+  void move(QVector3D pos,QMatrix4x4 modelView);
 
   bool checkCollision(QVector3D);
 

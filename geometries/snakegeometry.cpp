@@ -43,27 +43,15 @@ void SnakeGeometry::addChild() {
   child->addChild();
 }
 
-void SnakeGeometry::move(QVector3D pos) {
+void SnakeGeometry::move(QVector3D pos, QMatrix4x4 modelView) {
   if (child != nullptr) {
-    child->move(position);
+    child->move(position, modelView);
     child->corner = corner;
     corner = NO_CORNER;
     child->orientation = orientation;
   }
   position = pos;
-}
-
-void SnakeGeometry::animate(float percentage, QVector3D direction,
-                            QMatrix4x4 modelView) {
-  if (child != nullptr) {
-    child->animate(percentage, position - child->position, modelView);
-  }
-
-  if (corner != NO_CORNER) {
-    modelView.translate(position + direction);
-  } else {
-    modelView.translate(position - direction + direction * percentage);
-  }
+  modelView.translate(position);
   modelMatrix = modelView;
 }
 
@@ -342,6 +330,6 @@ void SnakeGeometry::newOrientation(Orientation orientation, Directions oldDir,
       break;
     }
 
-    child->corner = Corner(x);
+    corner = Corner(x);
   }
 }

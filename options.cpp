@@ -26,4 +26,4 @@ bool Options::running = true;
 
 int Options::score = 0;
 
-int Options::speed = 200;
+int Options::speed = 250;

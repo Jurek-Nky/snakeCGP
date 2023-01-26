@@ -7,18 +7,12 @@
 #include <iostream>
 
 GameWidget::GameWidget(QWidget *parent)
-    : QOpenGLWidget(parent), updateTimer(this), stopWatch(), snakeHead(nullptr),
+    : QOpenGLWidget(parent), updateTimer(this), snakeHead(nullptr),
       plane(nullptr) {
 
-  QObject::connect(&animationTimer, SIGNAL(timeout()), this, SLOT(animateGL()));
   QObject::connect(&updateTimer, SIGNAL(timeout()), this,
                    SLOT(updateSnakeHead()));
-  // 16ms => 60 fps
-  animationTimer.start(16);
   updateTimer.start(Options::speed);
-
-  stopWatch.start();
-
   connect(this, SIGNAL(openMenu()), parentWidget(), SLOT(openMenu()));
   connect(this, SIGNAL(gameOver()), parentWidget(), SLOT(gameOver()));
   connect(this, SIGNAL(toggleMaximized()), parentWidget(),
@@ -74,8 +68,6 @@ void GameWidget::initComponents() {
   snakeHeadMatrix.translate(snakeHeadPos);
   snakeHead = new SnakeGeometry(snakeHeadMatrix);
   snakeHead->isHead = true;
-  snakeHead->addChild();
-  snakeHead->addChild();
 
   generateNewFood();
 
@@ -168,23 +160,11 @@ void GameWidget::paintGL() {
   food->drawFoodGeometry(&program, projection);
 }
 
-void GameWidget::animateGL() {
-  if (singleStep && !Options::running) {
-    updateSnakeHead();
-    animateSnake();
-    singleStep = false;
-  } else if (Options::running) {
-    animateSnake();
-  }
-  update();
-}
-
 void GameWidget::updateSnakeHead() {
   if (!Options::running) {
     return;
   }
   Directions oldDirection = direction;
-  stopWatch.restart();
   direction = newDirection;
   if (snakeHead->checkFoodCollision(foodPos)) {
     snakeHead->addChild();
@@ -220,34 +200,12 @@ void GameWidget::updateSnakeHead() {
     emit gameOver();
   }
 
-  snakeHead->move(snakeHeadPos);
-}
-
-void GameWidget::animateSnake() {
-  uint elapsedInMs = stopWatch.nsecsElapsed() / 1000000;
-  float percentage = float(elapsedInMs) / Options::speed;
-
   QMatrix4x4 snakeHeadMatrix = viewMatrix;
   // move snakeHeadMatrix to the bottom left corner
   snakeHeadMatrix.translate(std::floor(-Options::boardSize / 2) - 1,
                             std::floor(-Options::boardSize / 2) - 1, 0.f);
-  QVector3D directionVec;
-  switch (direction) {
-  case UP:
-    directionVec = QVector3D(0.0f, 1.0f, 0.0f);
-    break;
-  case DOWN:
-    directionVec = QVector3D(0.0f, -1.0f, 0.0f);
-    break;
-  case LEFT:
-    directionVec = QVector3D(-1.0f, 0.0f, 0.0f);
-    break;
-  case RIGHT:
-    directionVec = QVector3D(1.0f, 0.0f, 0.0f);
-    break;
-  }
-
-  snakeHead->animate(percentage, directionVec, snakeHeadMatrix);
+  snakeHead->move(snakeHeadPos, snakeHeadMatrix);
+  update();
 }
 
 void GameWidget::resume() { Options::running = true; }
@@ -292,6 +250,8 @@ void GameWidget::keyPressEvent(QKeyEvent *e) {
       newDirection = DOWN;
     }
     break;
+  case Qt::Key_A:
+    snakeHead->addChild();
   case Qt::Key_Space:
     Options::running = !Options::running;
     break;
