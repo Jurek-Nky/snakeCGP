@@ -4,7 +4,7 @@
   <br>
 </h1>
 
-<h4 align="center">An implementation of the classic game snakeHead using OpenGL.</h4>
+<h4 align="center">An implementation of the classic game Snake using OpenGL.</h4>
 
 
 ## Dependencies
