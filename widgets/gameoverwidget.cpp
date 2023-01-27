@@ -14,6 +14,8 @@ GameOverWidget::GameOverWidget(QWidget *parent)
           SLOT(onNameButtonClicked()));
   connect(ui->playAgainButton, SIGNAL(clicked(bool)), this->parentWidget(),
           SLOT(playAgain()));
+  connect(ui->exitButton, SIGNAL(clicked(bool)), this,
+          SLOT(onExitButtonClicked()));
   ui->tableWidget->setColumnCount(2);
   ui->tableWidget->columnAt(0);
   QStringList *tableHeaders = new QStringList();
@@ -28,6 +30,7 @@ GameOverWidget::GameOverWidget(QWidget *parent)
   ui->tableWidget->setGridStyle(Qt::PenStyle::DashLine);
   fillTableFromFile();
   ui->playAgainButton->setStyleSheet("background-color: green");
+  ui->exitButton->setStyleSheet("background-color: red");
 }
 
 GameOverWidget::~GameOverWidget() {}
@@ -78,3 +81,4 @@ void GameOverWidget::fillTableFromFile() {
   }
   ui->tableWidget->sortByColumn(1, Qt::DescendingOrder);
 }
+void GameOverWidget::onExitButtonClicked() { exit(0); }
