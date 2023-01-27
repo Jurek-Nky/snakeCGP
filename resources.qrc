@@ -1,8 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>resources/textures/cube.png</file>
+        <file>resources/textures/cube.jpg</file>
         <file>resources/textures/brick.png</file>
         <file>resources/textures/snake.jpg</file>
         <file>resources/textures/snake.png</file>
+        <file>resources/textures/snake_tiger.png</file>
     </qresource>
 </RCC>
