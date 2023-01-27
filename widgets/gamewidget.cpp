@@ -253,13 +253,8 @@ void GameWidget::keyPressEvent(QKeyEvent *e) {
       newDirection = DOWN;
     }
     break;
-  case Qt::Key_A:
-    snakeHead->addChild();
   case Qt::Key_Space:
     Options::running = !Options::running;
-    break;
-  case Qt::Key_Comma:
-    singleStep = true;
     break;
   case Qt::Key_Q:
     exit(0);
