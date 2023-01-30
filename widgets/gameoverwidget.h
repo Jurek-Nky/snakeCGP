@@ -28,6 +28,9 @@ public slots:
   void onNameButtonClicked();
   void onExitButtonClicked();
 
+signals:
+  void restartGame();
+
 protected:
   void focusInEvent(QFocusEvent *event) override;
 };

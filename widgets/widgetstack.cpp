@@ -27,11 +27,22 @@ WidgetStack::WidgetStack(QWidget *parent) : QWidget(parent) {
   stack->setCurrentWidget(game);
   game->setFocus();
 
-  connect(this, SIGNAL(resumeGame()), game, SLOT(resume()));
-
+  connections();
+}
+void WidgetStack::connections() {
   connect(menu, SIGNAL(updateAudio()), soundEngine, SLOT(updateVolumes()));
-  connect(game, SIGNAL(updateAudio()), soundEngine, SLOT(updateVolumes()));
   connect(help, SIGNAL(closeHelp()), this, SLOT(closeMenu()));
+
+  connect(game, SIGNAL(updateAudio()), soundEngine, SLOT(updateVolumes()));
+  connect(game, SIGNAL(openMenu()), this, SLOT(openMenu()));
+  connect(game, SIGNAL(gameOver()), this, SLOT(gameOver()));
+  connect(game, SIGNAL(foodConsumed()), this, SLOT(foodConsumed()));
+  connect(game, SIGNAL(openHelp()), this, SLOT(openHelp()));
+  connect(game, SIGNAL(toggleMaximized()), this, SLOT(toggleMaximized()));
+
+  connect(gameOverWidget, SIGNAL(restartGame()), this, SLOT(restartGame()));
+
+  connect(menu, SIGNAL(closeMenu()), this, SLOT(closeMenu()));
 }
 
 WidgetStack::~WidgetStack() {}
@@ -43,8 +54,7 @@ void WidgetStack::keyPressEvent(QKeyEvent *e) {
     if (stack->currentWidget() == help || stack->currentWidget() == menu) {
       stack->setCurrentWidget(game);
       game->setFocus();
-      resumeGame();
-
+      Options::running = true;
 
     } else {
       stack->setCurrentWidget(menu);
@@ -56,7 +66,7 @@ void WidgetStack::keyPressEvent(QKeyEvent *e) {
 void WidgetStack::closeMenu() {
   stack->setCurrentWidget(game);
   game->setFocus();
-  emit resumeGame();
+  Options::running = true;
 }
 
 void WidgetStack::openMenu() {
@@ -83,9 +93,8 @@ void WidgetStack::restartGame() {
   game->setFocus();
   Options::running = true;
   stack->setCurrentWidget(game);
-  soundEngine = new SoundEngine();
+  soundEngine->playMusic();
+  connections();
 }
 void WidgetStack::foodConsumed() { soundEngine->playEatingSound(); }
-void WidgetStack::openHelp() {
-  stack->setCurrentWidget(help);
-}
+void WidgetStack::openHelp() { stack->setCurrentWidget(help); }
