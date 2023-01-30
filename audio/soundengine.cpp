@@ -8,18 +8,19 @@ SoundEngine::SoundEngine() {
   musicPlayer = new QMediaPlayer;
   musicOutput = new QAudioOutput;
   musicPlayer->setAudioOutput(musicOutput);
-  musicPlayer->setSource(QUrl("qrc:/audio/music.ogg"));
   musicOutput->setVolume(float(Options::musicLevel) / 100.0f);
-  musicPlayer->play();
-  musicPlayer->setLoops(QMediaPlayer::Infinite);
+  playMusic();
 }
 
-void SoundEngine::playMusic() {}
+void SoundEngine::playMusic() {
+  musicPlayer->setSource(QUrl("qrc:/audio/music.ogg"));
+  musicPlayer->setLoops(QMediaPlayer::Infinite);
+  musicPlayer->play();
+}
 
 void SoundEngine::playbackDurationChanged(qint64 duration) {}
 
 void SoundEngine::updateVolumes() {
-  std::cout << Options::soundEnabled << std::endl;
   musicOutput->setMuted(!Options::soundEnabled);
   musicOutput->setMuted(!Options::musicEnabled);
   musicOutput->setVolume(float(Options::musicLevel) / 100.0f);

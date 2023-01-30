@@ -13,12 +13,6 @@ GameWidget::GameWidget(QWidget *parent)
   QObject::connect(&updateTimer, SIGNAL(timeout()), this,
                    SLOT(updateSnakeHead()));
   updateTimer.start(Options::speed);
-  connect(this, SIGNAL(openMenu()), parentWidget(), SLOT(openMenu()));
-  connect(this, SIGNAL(gameOver()), parentWidget(), SLOT(gameOver()));
-  connect(this, SIGNAL(openHelp()), parentWidget(), SLOT(openHelp()));
-  connect(this, SIGNAL(toggleMaximized()), parentWidget(),
-          SLOT(toggleMaximized()));
-  connect(this, SIGNAL(foodConsumed()), parentWidget(), SLOT(foodConsumed()));
 }
 
 GameWidget::~GameWidget() {
@@ -88,7 +82,6 @@ void GameWidget::initComponents() {
 
 void GameWidget::generateNewFood() {
   Options::score += 1;
-  emit foodConsumed();
   foodPos =
       QVector3D(std::fmod(random(), Options::boardSize - 2.0f) + 1.0f,
                 std::fmod(random(), Options::boardSize - 2.0f) + 1.0f, 0.0f);
@@ -172,6 +165,7 @@ void GameWidget::updateSnakeHead() {
   Directions oldDirection = direction;
   direction = newDirection;
   if (snakeHead->checkFoodCollision(foodPos)) {
+    emit foodConsumed();
     snakeHead->addChild();
     generateNewFood();
   }
@@ -212,10 +206,6 @@ void GameWidget::updateSnakeHead() {
   snakeHead->move(snakeHeadPos, snakeHeadMatrix);
   update();
 }
-
-void GameWidget::resume() { Options::running = true; }
-
-void GameWidget::pause() { Options::running = false; }
 
 void GameWidget::wheelEvent(QWheelEvent *e) {
   float delta = e->angleDelta().y() / 100.0f;
