@@ -4,6 +4,7 @@
 #include "../geometries/FoodGeometry.h"
 #include "../geometries/planegeometry.h"
 #include "../geometries/snakegeometry.h"
+#include "../geometries/Skybox.h"
 #include "../options.h"
 
 #include <QBasicTimer>
@@ -90,6 +91,8 @@ private:
   PlaneGeometry *plane = nullptr;
 
   FoodGeometry *food = nullptr;
+
+  Skybox *skybox = nullptr;
 
   QMatrix4x4 projection;
 

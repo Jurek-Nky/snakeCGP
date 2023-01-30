@@ -150,12 +150,19 @@ void GameWidget::paintGL() {
   initShaders();
   glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  // call draw on all components
-  // snakeHead calls all its children
-  plane->drawPlaneGeometry(&program, projection);
   snakeHead->drawSnakeGeometry(&program, projection);
   food->drawFoodGeometry(&program, projection);
+  // call draw on all components
+  // snakeHead calls all its children
+  program.removeAllShaders();
+  program.addShaderFromSourceFile(QOpenGLShader::Vertex,
+                                     ":/shaders/vplane.glsl");
+  program.addShaderFromSourceFile(QOpenGLShader::Fragment,
+                                     ":/shaders/fplane.glsl");
+
+  program.link();
+  program.bind();
+  plane->drawPlaneGeometry(&program, projection);
 }
 
 void GameWidget::updateSnakeHead() {
