@@ -14,7 +14,7 @@ varying vec3 v_pos;
 void main()
 {
     vec3 lightcolor;
-    lightcolor.xyz = vec3(0.0, 1.0, 1.0);
+    lightcolor.xyz = vec3(1.0, 1.0, 1.0);
 
     vec3 lightpos;
     lightpos.xyz = vec3(1.0, 1.0, 2.0);
