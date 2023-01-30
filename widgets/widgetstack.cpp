@@ -27,7 +27,7 @@ WidgetStack::WidgetStack(QWidget *parent) : QWidget(parent) {
 
   connect(this, SIGNAL(resumeGame()), game, SLOT(resume()));
 
-  connect(menu, SIGNAL(updateAudio()), soundEngine, SLOT(updateAudio()));
+  connect(menu, SIGNAL(updateAudio()), soundEngine, SLOT(updateVolumes()));
 }
 
 WidgetStack::~WidgetStack() {}
@@ -68,13 +68,17 @@ void WidgetStack::gameOver() {
 void WidgetStack::toggleMaximized() {
   isMaximized() ? showNormal() : showMaximized();
 }
-void WidgetStack::playAgain() {
+void WidgetStack::restartGame() {
   delete game;
   Options::score = 0;
+  Options::speed = 200;
   game = new GameWidget(this);
   stack->addWidget(game);
   game->setFocus();
   Options::running = true;
   stack->setCurrentWidget(game);
-  std::cout << "play again" << std::endl;
+  soundEngine = new SoundEngine();
+}
+void WidgetStack::foodConsumed() {
+  soundEngine->playEatingSound();
 }

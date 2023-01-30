@@ -27,7 +27,9 @@ public slots:
 
   void toggleMaximized();
 
-  void playAgain();
+  void restartGame();
+
+  void foodConsumed();
 
 protected:
   void keyPressEvent(QKeyEvent *e) override;

@@ -13,7 +13,7 @@ GameOverWidget::GameOverWidget(QWidget *parent)
   connect(ui->nameInput, SIGNAL(returnPressed()), this,
           SLOT(onNameButtonClicked()));
   connect(ui->playAgainButton, SIGNAL(clicked(bool)), this->parentWidget(),
-          SLOT(playAgain()));
+          SLOT(restartGame()));
   connect(ui->exitButton, SIGNAL(clicked(bool)), this,
           SLOT(onExitButtonClicked()));
   ui->tableWidget->setColumnCount(2);

@@ -23,7 +23,7 @@ private:
 
 public slots:
 
-  void updateAudio();
+  void updateVolumes();
 
   void playbackDurationChanged(qint64);
 

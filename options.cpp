@@ -12,7 +12,7 @@ bool Options::soundEffectsEnabled = true;
 
 int Options::musicLevel = 50;
 
-int Options::soundEffectLevel = 50;
+int Options::soundEffectLevel = 100;
 
 int Options::soundOverallLevel = 100;
 

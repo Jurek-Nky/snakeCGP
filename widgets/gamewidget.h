@@ -45,6 +45,8 @@ signals:
 
   void toggleMaximized();
 
+  void foodConsumed();
+
 protected:
   void keyPressEvent(QKeyEvent *e) override;
 

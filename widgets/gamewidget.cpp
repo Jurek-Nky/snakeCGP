@@ -17,7 +17,8 @@ GameWidget::GameWidget(QWidget *parent)
   connect(this, SIGNAL(gameOver()), parentWidget(), SLOT(gameOver()));
   connect(this, SIGNAL(toggleMaximized()), parentWidget(),
           SLOT(toggleMaximized()));
-  Options::speed = 200;
+  connect(this, SIGNAL(foodConsumed()), parentWidget(), SLOT(foodConsumed()));
+
 }
 
 GameWidget::~GameWidget() {
@@ -87,6 +88,7 @@ void GameWidget::initComponents() {
 
 void GameWidget::generateNewFood() {
   Options::score += 1;
+  emit foodConsumed();
   foodPos =
       QVector3D(std::fmod(random(), Options::boardSize - 2.0f) + 1.0f,
                 std::fmod(random(), Options::boardSize - 2.0f) + 1.0f, 0.0f);
