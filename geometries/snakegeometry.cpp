@@ -23,7 +23,7 @@ SnakeGeometry::~SnakeGeometry() {
 
 void SnakeGeometry::initTexture() {
   texture =
-      new QOpenGLTexture(QImage(":/resources/textures/snake.png").mirrored());
+      new QOpenGLTexture(QImage(":/resources/textures/snake_tiger.png").mirrored());
   texture->setMinificationFilter(QOpenGLTexture::Nearest);
   texture->setMagnificationFilter(QOpenGLTexture::Linear);
   texture->setWrapMode(QOpenGLTexture::Repeat);

@@ -14,6 +14,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui OpenGL OpenGLWidgets Widgets Multi
 
 qt6_wrap_ui(widgets/menuwidget.h widgets/menuwidget.ui)
 qt6_wrap_ui(widgets/gameoverwidget.h widgets/gameoverwidget.ui)
+qt6_wrap_ui(widgets/helpwidget.h widgets/helpwidget.ui)
 
 qt_add_executable(snake
         main.cpp
@@ -23,6 +24,7 @@ qt_add_executable(snake
         geometries/planegeometry.cpp geometries/planegeometry.h
         geometries/FoodGeometry.cpp geometries/FoodGeometry.h
         widgets/menuwidget.cpp widgets/menuwidget.h widgets/menuwidget.ui
+        widgets/helpwidget.cpp widgets/helpwidget.h widgets/helpwidget.ui
         widgets/widgetstack.cpp widgets/widgetstack.h
         options.cpp options.h
         widgets/gameoverwidget.cpp widgets/gameoverwidget.h widgets/gameoverwidget.ui

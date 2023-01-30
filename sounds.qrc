@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
-<!--        <file>audio/eating.wav</file>-->
+        <file>audio/eating.wav</file>
         <file>audio/gameOver.wav</file>
-        <file>audio/music.mp3</file>
+        <file>audio/music.ogg</file>
     </qresource>
 </RCC>

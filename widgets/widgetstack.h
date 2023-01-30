@@ -4,6 +4,7 @@
 #include "../audio/soundengine.h"
 #include "gameoverwidget.h"
 #include "gamewidget.h"
+#include "helpwidget.h"
 #include "menuwidget.h"
 #include <QOpenGLFunctions>
 #include <QStackedWidget>
@@ -23,11 +24,15 @@ public slots:
 
   void openMenu();
 
+  void openHelp();
+
   void gameOver();
 
   void toggleMaximized();
 
-  void playAgain();
+  void restartGame();
+
+  void foodConsumed();
 
 protected:
   void keyPressEvent(QKeyEvent *e) override;
@@ -42,6 +47,8 @@ private:
   MenuWidget *menu = nullptr;
 
   GameWidget *game = nullptr;
+
+  HelpWidget *help = nullptr;
 
   GameOverWidget *gameOverWidget = nullptr;
 

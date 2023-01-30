@@ -62,7 +62,7 @@ void FoodGeometry::initFoodGeometry() {
 // load texture from foodNormal.jpg file
 void FoodGeometry::initTexture() {
   texture =
-      new QOpenGLTexture(QImage(":/resources/textures/cube.png").mirrored());
+      new QOpenGLTexture(QImage(":/resources/textures/cube.jpg").mirrored());
   texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
   texture->setMagnificationFilter(QOpenGLTexture::Linear);
   texture->setWrapMode(QOpenGLTexture::Repeat);
