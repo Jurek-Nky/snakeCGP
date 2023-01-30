@@ -15,10 +15,10 @@ GameWidget::GameWidget(QWidget *parent)
   updateTimer.start(Options::speed);
   connect(this, SIGNAL(openMenu()), parentWidget(), SLOT(openMenu()));
   connect(this, SIGNAL(gameOver()), parentWidget(), SLOT(gameOver()));
+  connect(this, SIGNAL(openHelp()), parentWidget(), SLOT(openHelp()));
   connect(this, SIGNAL(toggleMaximized()), parentWidget(),
           SLOT(toggleMaximized()));
   connect(this, SIGNAL(foodConsumed()), parentWidget(), SLOT(foodConsumed()));
-
 }
 
 GameWidget::~GameWidget() {
@@ -233,24 +233,28 @@ void GameWidget::keyPressEvent(QKeyEvent *e) {
   switch (e->key()) {
   case Qt::Key_Right:
   case Qt::Key_L:
+  case Qt::Key_D:
     if (direction != LEFT) {
       newDirection = RIGHT;
     }
     break;
   case Qt::Key_Left:
   case Qt::Key_H:
+  case Qt::Key_A:
     if (direction != RIGHT) {
       newDirection = LEFT;
     }
     break;
   case Qt::Key_Up:
   case Qt::Key_K:
+  case Qt::Key_W:
     if (direction != DOWN) {
       newDirection = UP;
     }
     break;
   case Qt::Key_Down:
   case Qt::Key_J:
+  case Qt::Key_S:
     if (direction != UP) {
       newDirection = DOWN;
     }
@@ -267,6 +271,14 @@ void GameWidget::keyPressEvent(QKeyEvent *e) {
   case Qt::Key_Escape:
     Options::running = false;
     emit openMenu();
+    break;
+  case Qt::Key_M:
+    Options::soundEnabled = !Options::soundEnabled;
+    emit updateAudio();
+    break;
+  case Qt::Key_Question:
+    Options::running = false;
+    emit openHelp();
     break;
   }
 }

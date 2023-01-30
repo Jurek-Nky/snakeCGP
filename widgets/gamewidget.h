@@ -41,11 +41,15 @@ signals:
 
   void openMenu();
 
+  void openHelp();
+
   void gameOver();
 
   void toggleMaximized();
 
   void foodConsumed();
+
+  void updateAudio();
 
 protected:
   void keyPressEvent(QKeyEvent *e) override;

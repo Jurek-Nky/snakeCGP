@@ -12,28 +12,34 @@ SoundEngine::SoundEngine() {
   musicOutput->setVolume(float(Options::musicLevel) / 100.0f);
   musicPlayer->play();
   musicPlayer->setLoops(QMediaPlayer::Infinite);
-  }
+}
 
 void SoundEngine::playMusic() {}
 
 void SoundEngine::playbackDurationChanged(qint64 duration) {}
 
 void SoundEngine::updateVolumes() {
+  std::cout << Options::soundEnabled << std::endl;
+  musicOutput->setMuted(!Options::soundEnabled);
   musicOutput->setMuted(!Options::musicEnabled);
   musicOutput->setVolume(float(Options::musicLevel) / 100.0f);
+
+  musicPlayer->audioOutput()->setMuted(!Options::soundEnabled | !Options::musicEnabled);
+  musicPlayer->audioOutput()->setVolume(float(Options::musicLevel) / 100.0f);
 }
 
 void SoundEngine::playEatingSound() {
-  effectPlayer = new QMediaPlayer;
-  effectOutput = new QAudioOutput;
-  effectPlayer->setAudioOutput(effectOutput);
-  effectOutput->setVolume(float(Options::soundEffectLevel) / 100.0f);
-  effectPlayer->setSource(QUrl("qrc:/audio/eating.wav"));
-  effectPlayer->play();
+  if (Options::soundEnabled && Options::soundEffectsEnabled) {
+    effectPlayer = new QMediaPlayer;
+    effectOutput = new QAudioOutput;
+    effectPlayer->setAudioOutput(effectOutput);
+    effectOutput->setVolume(float(Options::soundEffectLevel) / 100.0f);
+    effectPlayer->setSource(QUrl("qrc:/audio/eating.wav"));
+    effectPlayer->play();
+  }
 }
 
-void SoundEngine::playMenuMusic() {
-}
+void SoundEngine::playMenuMusic() {}
 
 void SoundEngine::playGameOver() {
   musicPlayer->setSource(QUrl("qrc:/audio/gameOver.wav"));

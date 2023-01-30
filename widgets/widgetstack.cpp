@@ -10,6 +10,7 @@ WidgetStack::WidgetStack(QWidget *parent) : QWidget(parent) {
   menu = new MenuWidget(this);
   game = new GameWidget(this);
   gameOverWidget = new GameOverWidget(this);
+  help = new HelpWidget(this);
   stack = new QStackedWidget;
 
   soundEngine = new SoundEngine();
@@ -17,6 +18,7 @@ WidgetStack::WidgetStack(QWidget *parent) : QWidget(parent) {
   stack->addWidget(game);
   stack->addWidget(menu);
   stack->addWidget(gameOverWidget);
+  stack->addWidget(help);
 
   auto *layout = new QVBoxLayout;
   layout->addWidget(stack);
@@ -28,6 +30,8 @@ WidgetStack::WidgetStack(QWidget *parent) : QWidget(parent) {
   connect(this, SIGNAL(resumeGame()), game, SLOT(resume()));
 
   connect(menu, SIGNAL(updateAudio()), soundEngine, SLOT(updateVolumes()));
+  connect(game, SIGNAL(updateAudio()), soundEngine, SLOT(updateVolumes()));
+  connect(help, SIGNAL(closeHelp()), this, SLOT(closeMenu()));
 }
 
 WidgetStack::~WidgetStack() {}
@@ -36,10 +40,11 @@ void WidgetStack::keyPressEvent(QKeyEvent *e) {
 
   switch (e->key()) {
   case Qt::Key_Escape:
-    if (stack->currentWidget() == menu) {
+    if (stack->currentWidget() == help || stack->currentWidget() == menu) {
       stack->setCurrentWidget(game);
       game->setFocus();
       resumeGame();
+
 
     } else {
       stack->setCurrentWidget(menu);
@@ -51,6 +56,7 @@ void WidgetStack::keyPressEvent(QKeyEvent *e) {
 void WidgetStack::closeMenu() {
   stack->setCurrentWidget(game);
   game->setFocus();
+  emit resumeGame();
 }
 
 void WidgetStack::openMenu() {
@@ -79,6 +85,7 @@ void WidgetStack::restartGame() {
   stack->setCurrentWidget(game);
   soundEngine = new SoundEngine();
 }
-void WidgetStack::foodConsumed() {
-  soundEngine->playEatingSound();
+void WidgetStack::foodConsumed() { soundEngine->playEatingSound(); }
+void WidgetStack::openHelp() {
+  stack->setCurrentWidget(help);
 }

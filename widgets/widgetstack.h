@@ -4,6 +4,7 @@
 #include "../audio/soundengine.h"
 #include "gameoverwidget.h"
 #include "gamewidget.h"
+#include "helpwidget.h"
 #include "menuwidget.h"
 #include <QOpenGLFunctions>
 #include <QStackedWidget>
@@ -22,6 +23,8 @@ public slots:
   void closeMenu();
 
   void openMenu();
+
+  void openHelp();
 
   void gameOver();
 
@@ -44,6 +47,8 @@ private:
   MenuWidget *menu = nullptr;
 
   GameWidget *game = nullptr;
+
+  HelpWidget *help = nullptr;
 
   GameOverWidget *gameOverWidget = nullptr;
 
