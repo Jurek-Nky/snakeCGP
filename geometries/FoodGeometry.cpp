@@ -23,7 +23,7 @@ FoodGeometry::~FoodGeometry() {}
 void FoodGeometry::drawFoodGeometry(QOpenGLShaderProgram *program,
                                     QMatrix4x4 projection) {
   program->setUniformValue("mvp_matrix", projection * modelMatrix);
-
+  program->setUniformValue("model_matrix", modelMatrix);
   texture->bind();
   program->setUniformValue("texture", 0);
 

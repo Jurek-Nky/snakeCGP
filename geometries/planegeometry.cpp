@@ -49,6 +49,7 @@ void PlaneGeometry::initVertex() {
 void PlaneGeometry::drawPlaneGeometry(QOpenGLShaderProgram *program,
                                       QMatrix4x4 projection) {
   program->setUniformValue("mvp_matrix", projection * modelMatrix);
+  program->setUniformValue("model_matrix", modelMatrix);
 
   arrayBuffer.bind();
 

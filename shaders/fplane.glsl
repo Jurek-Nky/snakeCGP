@@ -14,12 +14,12 @@ varying vec3 v_pos;
 void main()
 {
     vec3 lightcolor;
-    lightcolor.xyz = vec3(0.0, 1.0, 1.0);
+    lightcolor.xyz = vec3(1.0, 1.0, 1.0);
 
     vec3 lightpos;
-    lightpos.xyz = vec3(1.0, 1.0, 2.0);
+    lightpos.xyz = vec3(0.0, 0.0, 1.0);
 
-    float ambient_strength = 0.3;
+    float ambient_strength = 1.0;
     vec3 ambient = ambient_strength * lightcolor;
 
     vec3 norm = normalize(v_normal);
@@ -32,8 +32,7 @@ void main()
     vec3 objectcolor;
     // Set fragment color from texture
     objectcolor.xyz = vec3(texture2D(texture, v_texcoord));
-    result = (ambient + diffuse) * objectcolor;
+    result = (ambient + 0.0*diffuse) * objectcolor;
     gl_FragColor = vec4(result, 1.0);
 }
 //! [0]
-

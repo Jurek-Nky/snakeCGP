@@ -253,6 +253,7 @@ void SnakeGeometry::drawSnakeGeometry(QOpenGLShaderProgram *program,
   // if (corner != NO_CORNER) {
   //   initVertex(0.5, 1, 10, 20, false);
   // }
+  program->setUniformValue("model_matrix", modelMatrix);
   program->setUniformValue("mvp_matrix", projection * orientationMatrix);
 
   arrayBuffer.bind();
@@ -279,6 +280,13 @@ void SnakeGeometry::drawSnakeGeometry(QOpenGLShaderProgram *program,
 
   texture->bind();
   program->setUniformValue("texture", 0);
+
+  offset += sizeof(QVector2D);
+
+  int normalLocation = program ->attributeLocation("a_normal");
+  program->enableAttributeArray(normalLocation);
+  program->setAttributeBuffer(normalLocation, GL_FLOAT, offset, 3,
+                              sizeof(VertexData));
 
   glDrawElements(GL_TRIANGLE_STRIP, indexBuffer.size(), GL_UNSIGNED_SHORT,
                  nullptr);

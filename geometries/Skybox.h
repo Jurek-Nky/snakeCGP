@@ -2,8 +2,8 @@
 // Created by jurek on 30.11.22.
 //
 
-#ifndef SNAKECGP_FOODGEOMETRY_H
-#define SNAKECGP_FOODGEOMETRY_H
+#ifndef SNAKECGP_SKYBOX_H
+#define SNAKECGP_SKYBOX_H
 
 #include <QFile>
 #include <QMatrix4x4>
@@ -12,18 +12,18 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLTexture>
 
-class FoodGeometry : QOpenGLFunctions {
+class Skybox : QOpenGLFunctions {
 public:
-  explicit FoodGeometry(QMatrix4x4 model);
+  explicit Skybox(QMatrix4x4 model);
 
-  virtual ~FoodGeometry();
+  virtual ~Skybox();
 
-  void drawFoodGeometry(QOpenGLShaderProgram *program, QMatrix4x4 projection);
+  void drawSkybox(QOpenGLShaderProgram *program, QMatrix4x4 projection);
 
 private:
   QMatrix4x4 modelMatrix;
 
-  void initFoodGeometry();
+  void initSkybox();
 
   void initVertex();
 
@@ -36,4 +36,4 @@ private:
   QVector3D position;
 };
 
-#endif // SNAKECGP_FOODGEOMETRY_H
+#endif // SNAKECGP_SKYBOX_H

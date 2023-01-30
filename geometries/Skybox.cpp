@@ -2,25 +2,25 @@
 // Created by jurek on 30.11.22.
 //
 
-#include "FoodGeometry.h"
+#include "Skybox.h"
 #include "vertexData.h"
 #include <iostream>
 
 // create buffers and call init functions
-FoodGeometry::FoodGeometry(QMatrix4x4 model)
+Skybox::Skybox(QMatrix4x4 model)
     : indexBuffer(QOpenGLBuffer::IndexBuffer), texture(nullptr) {
   initializeOpenGLFunctions();
   arrayBuffer.create();
   indexBuffer.create();
 
   modelMatrix = model;
-  initFoodGeometry();
+  initSkybox();
 }
 
-FoodGeometry::~FoodGeometry() {}
+Skybox::~Skybox() {}
 
 // draw the Model using the previously created buffers
-void FoodGeometry::drawFoodGeometry(QOpenGLShaderProgram *program,
+void Skybox::drawSkybox(QOpenGLShaderProgram *program,
                                     QMatrix4x4 projection) {
   program->setUniformValue("mvp_matrix", projection * modelMatrix);
   program->setUniformValue("model_matrix", modelMatrix);
@@ -40,13 +40,13 @@ void FoodGeometry::drawFoodGeometry(QOpenGLShaderProgram *program,
   glDrawElements(GL_TRIANGLES, indexBuffer.size(), GL_UNSIGNED_INT, nullptr);
 }
 
-void FoodGeometry::initFoodGeometry() {
+void Skybox::initSkybox() {
   initTexture();
   initVertex();
 }
 
 // load texture from foodNormal.jpg file
-void FoodGeometry::initTexture() {
+void Skybox::initTexture() {
   texture =
       new QOpenGLTexture(QImage(":/resources/textures/cube.png").mirrored());
   texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
@@ -55,7 +55,7 @@ void FoodGeometry::initTexture() {
 }
 
 // fills buffers with data to draw a cube
-void FoodGeometry::initVertex() {
+void Skybox::initVertex() {
   VertexData vertices[] = {
       // front
       {QVector3D(-0.5f, -0.5f, 0.5f), QVector2D(0.0f, 0.0f)},
