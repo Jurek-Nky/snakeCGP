@@ -24,20 +24,34 @@ void FoodGeometry::drawFoodGeometry(QOpenGLShaderProgram *program,
                                     QMatrix4x4 projection) {
   program->setUniformValue("mvp_matrix", projection * modelMatrix);
 
+  texture->bind();
+  program->setUniformValue("texture", 0);
+
+  // Tell OpenGL which VBOs to use
   arrayBuffer.bind();
   indexBuffer.bind();
 
-  qintptr offset = 0;
+  // Offset for position
+  quintptr offset = 0;
 
+  // Tell OpenGL programmable pipeline how to locate vertex position data
   int vertexLocation = program->attributeLocation("a_position");
   program->enableAttributeArray(vertexLocation);
   program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3,
                               sizeof(VertexData));
 
-  texture->bind();
-  program->setUniformValue("texture", 0);
+  // Offset for texture coordinate
+  offset += sizeof(QVector3D);
 
-  glDrawElements(GL_TRIANGLES, indexBuffer.size(), GL_UNSIGNED_INT, nullptr);
+  // Tell OpenGL programmable pipeline how to locate vertex texture coordinate
+  // data
+  int texcoordLocation = program->attributeLocation("a_texcoord");
+  program->enableAttributeArray(texcoordLocation);
+  program->setAttributeBuffer(texcoordLocation, GL_FLOAT, offset, 2,
+                              sizeof(VertexData));
+
+  glDrawElements(GL_TRIANGLE_STRIP, indexBuffer.size(), GL_UNSIGNED_SHORT,
+                 nullptr);
 }
 
 void FoodGeometry::initFoodGeometry() {
@@ -48,7 +62,7 @@ void FoodGeometry::initFoodGeometry() {
 // load texture from foodNormal.jpg file
 void FoodGeometry::initTexture() {
   texture =
-      new QOpenGLTexture(QImage(":/resources/textures/cube.png").mirrored());
+      new QOpenGLTexture(QImage(":/resources/textures/cube.jpg").mirrored());
   texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
   texture->setMagnificationFilter(QOpenGLTexture::Linear);
   texture->setWrapMode(QOpenGLTexture::Repeat);
@@ -56,55 +70,49 @@ void FoodGeometry::initTexture() {
 
 // fills buffers with data to draw a cube
 void FoodGeometry::initVertex() {
-  VertexData vertices[] = {
-      // front
-      {QVector3D(-0.5f, -0.5f, 0.5f), QVector2D(0.0f, 0.0f)},
-      {QVector3D(0.5f, -0.5f, 0.5f), QVector2D(1.0f, 0.0f)},
-      {QVector3D(0.5f, 0.5f, 0.5f), QVector2D(1.0f, 1.0f)},
-      {QVector3D(-0.5f, 0.5f, 0.5f), QVector2D(0.0f, 1.0f)},
+  float radius = 0.5f;
+  int latitudeBands = 30;
+  int longitudeBands = 30;
+  std::vector<VertexData> vertices;
+  std::vector<GLushort> indices;
 
-      // back
-      {QVector3D(-0.5f, -0.5f, -0.5f), QVector2D(1.0f, 0.0f)},
-      {QVector3D(0.5f, -0.5f, -0.5f), QVector2D(0.0f, 0.0f)},
-      {QVector3D(0.5f, 0.5f, -0.5f), QVector2D(0.0f, 1.0f)},
-      {QVector3D(-0.5f, 0.5f, -0.5f), QVector2D(1.0f, 1.0f)},
+  for (int latNumber = 0; latNumber <= latitudeBands; latNumber++) {
+    float theta = latNumber * M_PI / latitudeBands;
+    float sinTheta = sin(theta);
+    float cosTheta = cos(theta);
 
-      // left
-      {QVector3D(-0.5f, -0.5f, -0.5f), QVector2D(0.0f, 0.0f)},
-      {QVector3D(-0.5f, -0.5f, 0.5f), QVector2D(1.0f, 0.0f)},
-      {QVector3D(-0.5f, 0.5f, 0.5f), QVector2D(1.0f, 1.0f)},
-      {QVector3D(-0.5f, 0.5f, -0.5f), QVector2D(0.0f, 1.0f)},
+    for (int longNumber = 0; longNumber <= longitudeBands; longNumber++) {
+      float phi = longNumber * 2 * M_PI / longitudeBands;
+      float sinPhi = sin(phi);
+      float cosPhi = cos(phi);
 
-      // right
-      {QVector3D(0.5f, -0.5f, 0.5f), QVector2D(0.0f, 0.0f)},
-      {QVector3D(0.5f, -0.5f, -0.5f), QVector2D(1.0f, 0.0f)},
-      {QVector3D(0.5f, 0.5f, -0.5f), QVector2D(1.0f, 1.0f)},
-      {QVector3D(0.5f, 0.5f, 0.5f), QVector2D(0.0f, 1.0f)},
+      float x = cosPhi * sinTheta;
+      float y = cosTheta;
+      float z = sinPhi * sinTheta;
 
-      // top
-      {QVector3D(-0.5f, 0.5f, 0.5f), QVector2D(0.0f, 0.0f)},
-      {QVector3D(0.5f, 0.5f, 0.5f), QVector2D(1.0f, 0.0f)},
-      {QVector3D(0.5f, 0.5f, -0.5f), QVector2D(1.0f, 1.0f)},
-      {QVector3D(-0.5f, 0.5f, -0.5f), QVector2D(0.0f, 1.0f)},
+      float u = 1 - (longNumber / (float)longitudeBands);
+      float v = 1 - (latNumber / (float)latitudeBands);
 
-      // bottom
-      {QVector3D(-0.5f, -0.5f, -0.5f), QVector2D(0.0f, 0.0f)},
-      {QVector3D(0.5f, -0.5f, -0.5f), QVector2D(1.0f, 0.0f)},
-      {QVector3D(0.5f, -0.5f, 0.5f), QVector2D(1.0f, 1.0f)},
-      {QVector3D(-0.5f, -0.5f, 0.5f), QVector2D(0.0f, 1.0f)}};
+      VertexData vertex;
+      vertex.position = QVector3D(x * radius, y * radius, z * radius);
+      vertex.uv = QVector2D(u, v);
+      vertex.normal = QVector3D(x, y, z);
+      vertices.push_back(vertex);
+    }
+  }
+  // push back indices
+  for (int latNumber = 0; latNumber < latitudeBands; latNumber++) {
+    for (int longNumber = 0; longNumber <= longitudeBands; longNumber++) {
+      indices.push_back(latNumber * (longitudeBands + 1) + longNumber);
+      indices.push_back((latNumber + 1) * (longitudeBands + 1) + longNumber);
+    }
+  }
 
-  GLuint indices[] = {
-      0,  1,  2,  2,  3,  0,  // front
-      4,  5,  6,  6,  7,  4,  // back
-      8,  9,  10, 10, 11, 8,  // left
-      12, 13, 14, 14, 15, 12, // right
-      16, 17, 18, 18, 19, 16, // top
-      20, 21, 22, 22, 23, 20  // bottom
-  };
-
+  // Transfer vertex data to VBO 0
   arrayBuffer.bind();
-  arrayBuffer.allocate(vertices, 24 * sizeof(VertexData));
+  arrayBuffer.allocate(vertices.data(), vertices.size() * sizeof(VertexData));
 
+  // Transfer index data to VBO 1
   indexBuffer.bind();
-  indexBuffer.allocate(indices, 36 * sizeof(GLuint));
+  indexBuffer.allocate(indices.data(), indices.size() * sizeof(GLushort));
 }

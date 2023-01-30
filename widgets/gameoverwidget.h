@@ -26,6 +26,7 @@ private:
 
 public slots:
   void onNameButtonClicked();
+  void onExitButtonClicked();
 
 protected:
   void focusInEvent(QFocusEvent *event) override;
