@@ -53,6 +53,7 @@ private:
   GameOverWidget *gameOverWidget = nullptr;
 
   SoundEngine *soundEngine = nullptr;
+  void connections();
 };
 
 #endif // SNAKECGP_WIDGETSTACK_H

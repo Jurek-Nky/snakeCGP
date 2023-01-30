@@ -32,9 +32,12 @@ public slots:
 
   void setSoundEnabled(bool);
 
+
 signals:
 
   void updateAudio();
+
+  void closeMenu();
 
 private:
   Ui::MenuWidget *ui;

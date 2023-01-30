@@ -12,8 +12,8 @@ GameOverWidget::GameOverWidget(QWidget *parent)
           SLOT(onNameButtonClicked()));
   connect(ui->nameInput, SIGNAL(returnPressed()), this,
           SLOT(onNameButtonClicked()));
-  connect(ui->playAgainButton, SIGNAL(clicked(bool)), this->parentWidget(),
-          SLOT(restartGame()));
+  connect(ui->playAgainButton, SIGNAL(clicked(bool)), this,
+          SIGNAL(restartGame()));
   connect(ui->exitButton, SIGNAL(clicked(bool)), this,
           SLOT(onExitButtonClicked()));
   ui->tableWidget->setColumnCount(2);

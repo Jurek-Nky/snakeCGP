@@ -31,8 +31,8 @@ MenuWidget::MenuWidget(QWidget *parent)
   ui->soundOverallSlider->setSingleStep(10);
   ui->soundOverallSlider->setValue(Options::soundOverallLevel);
 
-  connect(this->ui->close, SIGNAL(clicked(bool)), parentWidget(),
-          SLOT(closeMenu()));
+  connect(this->ui->close, SIGNAL(clicked(bool)), this,
+          SIGNAL(closeMenu()));
 
   connect(this->ui->musicCheckbox, SIGNAL(clicked(bool)), this,
           SLOT(setMusicEnabled(bool)));

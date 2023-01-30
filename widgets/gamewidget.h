@@ -17,7 +17,6 @@
 #include <QTimer>
 #include <QVector2D>
 
-
 class GameWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   Q_OBJECT
 
@@ -30,12 +29,7 @@ public:
 
 private slots:
 
-
   void updateSnakeHead();
-
-  void resume();
-
-  void pause();
 
 signals:
 
